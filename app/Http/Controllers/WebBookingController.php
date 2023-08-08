@@ -109,7 +109,7 @@ class WebBookingController extends Controller
             'bookedSchedulesString' => $bookedSchedulesString,
             'tempBookingDetailString' => $tempBookingDetailString,
             'html' =>  trim(preg_replace('/\s\s+/', ' ', $html)),
-            'bookingHtml' =>  trim(preg_replace('/\s\s+/', ' ', $bookingHtml)),
+            'bookingHtml' =>  trim(preg_replace('/\s+/', ' ', $bookingHtml)),
             'continueProcessHtml' =>  trim(preg_replace('/\s\s+/', ' ', $continueProcessHtml)),
         ];
 
