@@ -108,9 +108,9 @@ class WebBookingController extends Controller
             'successMessage' => $successMessage,
             'bookedSchedulesString' => $bookedSchedulesString,
             'tempBookingDetailString' => $tempBookingDetailString,
-            'html' =>  trim(preg_replace('/\s\s+/', ' ', $html)),
+            'html' =>  trim(preg_replace('/\s+/', ' ', $html)),
             'bookingHtml' =>  trim(preg_replace('/\s+/', ' ', $bookingHtml)),
-            'continueProcessHtml' =>  trim(preg_replace('/\s\s+/', ' ', $continueProcessHtml)),
+            'continueProcessHtml' =>  trim(preg_replace('/\s+/', ' ', $continueProcessHtml)),
         ];
 
         return view("main.layouts.wrapper", $data);
