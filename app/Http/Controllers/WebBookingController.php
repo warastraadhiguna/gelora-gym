@@ -261,45 +261,50 @@ class WebBookingController extends Controller
 
     public function midtransPayment($id)
     {
+        try {
 
-        // Set your Merchant Server Key
-        Config::$serverKey = config('midtrans.server_key');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        Config::$isProduction = config('midtrans.is_production');
-        // Set sanitization on (default)
-        Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        Config::$is3ds = true;
+            // Set your Merchant Server Key
+            Config::$serverKey = config('midtrans.server_key');
+            // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+            Config::$isProduction = config('midtrans.is_production');
+            // Set sanitization on (default)
+            Config::$isSanitized = true;
+            // Set 3DS transaction for credit card to true
+            Config::$is3ds = true;
 
-        $receipt = Receipt::find($id);
-        $total = 0;
-        foreach ($receipt->receiptDetails as $receiptDetail) {
-            $total = $total + $receiptDetail->price;
+            $receipt = Receipt::find($id);
+            $total = 0;
+            foreach ($receipt->receiptDetails as $receiptDetail) {
+                $total = $total + $receiptDetail->price;
+            }
+
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => $id,
+                    'gross_amount' => $total,
+                ),
+                'customer_details' => array(
+                    'first_name' =>  $receipt->name,
+                    'last_name' =>  '',
+                    'email' => $receipt->email,
+                    'phone' => $receipt->phone,
+                ),
+            );
+
+            $snapToken = Snap::getSnapToken($params);
+            $data =[
+                'content' => "main/booking/midtrans-payment",
+                'receipt' => $receipt,
+                'snapToken' => $snapToken,
+                'building' => $receipt->receiptDetails[0]->schedule->court->building,
+                'nowTime' => \Carbon\Carbon::now()
+            ];
+
+            return view("main.layouts.wrapper", $data);
+        } catch (Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
         }
-
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => $id,
-                'gross_amount' => $total,
-            ),
-            'customer_details' => array(
-                'first_name' =>  $receipt->name,
-                'last_name' =>  '',
-                'email' => $receipt->email,
-                'phone' => $receipt->phone,
-            ),
-        );
-
-        $snapToken = Snap::getSnapToken($params);
-        $data =[
-            'content' => "main/booking/midtrans-payment",
-            'receipt' => $receipt,
-            'snapToken' => $snapToken,
-            'building' => $receipt->receiptDetails[0]->schedule->court->building,
-            'nowTime' => \Carbon\Carbon::now()
-        ];
-
-        return view("main.layouts.wrapper", $data);
     }
 
     public function midtransCallback(Request $request)
