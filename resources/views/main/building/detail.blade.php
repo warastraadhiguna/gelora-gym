@@ -1,5 +1,5 @@
 <!-- Breadcrumb -->
-<div class="breadcrumb-bar-two">
+{{-- <div class="breadcrumb-bar-two">
     <div class="container">
         <div class="row align-items-center inner-banner">
             <div class="col-md-12 col-12 text-center">
@@ -13,12 +13,12 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- /Breadcrumb -->
 
 <!-- Page Content -->
 <div class="content">
-    <div class="container">
+    <div class="container mt-5">
 
         <!-- Doctor Widget -->
         <div class="card">

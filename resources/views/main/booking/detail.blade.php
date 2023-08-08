@@ -24,7 +24,7 @@
 
 <!-- Page Content -->
 <div class="content">
-    <div class="container">
+    <div class="container mt-5">
         <div class="row"  id="bookingContent">
             <div class="col-12">
 
@@ -41,15 +41,24 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <!-- Submit Section -->
-                        <a class="btn btn-outline-danger" onclick="showInformation(0)"> Filter Detail</a>          
-                        <div class="submit-section proceed-btn text-end form-search-btn">
-                            <a href="{{ URL::to('/checkout') . "/" . $building->id }}" class="btn btn-primary submit-btn">Proses Pemesanan</a>
-                        </div>
-                        <!-- /Submit Section -->      
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="submit-section proceed-btn text-end">
+                                    {{-- <a href="{{ URL::to('/checkout') . "/" . $building->id }}" class="btn btn-primary submit-btn m-1">Lanjutkan Pemrosesan</a> --}}
+                                </div>               
+                            </div> 
+                            <div class="col-md-9">
+                                <div class="submit-section proceed-btn text-end form-search-btn"  id="focusElement">
+                                    <a class="btn btn-primary submit-btn m-1" onclick="document.getElementById('focusElement').scrollIntoView();"> Pesan Harian</a>   
+
+                                    <a class="btn btn-primary submit-btn m-1" onclick="showInformation(0)"> Pesan Berulang</a>   
+                                </div>               
+                            </div>         
+                        </div>                    
                     </div>
                 </div>  
-
+                <a class="btn btn-link m-1" href="#" onclick="showTutorial()">Tutorial Pemesanan</a>
+                <a id="upper-continue-process-button" style="visibility: hidden" class="btn btn-primary submit-btn m-1" href="{{ URL::to('/checkout') . "/" . $building->id }}">Lanjutkan Pemrosesan</a>                
                 <div class="dct-appoinment">
                     <div class="card">              
                         <div class="card-body pt-0">
@@ -57,8 +66,8 @@
                                 <ul class="nav nav-tabs nav-tabs-bottom nav-justified flex-wrap">
                                 @foreach($building->courts as $key => $court)                                    
                                     <li class="nav-item">
-                                        <a class="nav-link {{(!$element && $key == 0) || $element == 'court'. $court->id? 'active' : '' }}" href="#court{{ $court->id }}" data-bs-toggle="tab">{{ $court->name }}</a>
-                                        <p class="text-muted mt-3">{{ $court->price }}</p>
+                                        <a class="nav-link {{(!$element && $key == 0) || $element == 'court'. $court->id? 'active' : '' }}" href="#court{{ $court->id }}" data-bs-toggle="tab">Pilih {{ $court->name }}</a>
+                                        {{-- <p class="text-muted mt-3">{{ $court->price }}</p> --}}
                                     </li>
                                 @endforeach                                       
                                 </ul>
@@ -161,15 +170,19 @@
                         </div>
                     </div>
                 </div>    
+                <a id="lower-continue-process-button" style="visibility: hidden" class="btn btn-primary submit-btn m-1" href="{{ URL::to('/checkout') . "/" . $building->id }}">Lanjutkan Pemrosesan</a>                   
             </div>
         </div>
     </div>
 </div>	
 <script>
+    const upper = document.getElementById("upper-continue-process-button");
+    const lower = document.getElementById("lower-continue-process-button"); 
+
 window.onload = function(){ 
     const errorMessage = '{{ $errorMessage }}';   
-    const successMessage = '{{ $successMessage }}';         
-    const showModalOnLoad = '{{ $showModalOnLoad }}';
+    const successMessage = '{{ $successMessage }}';
+    const showModalOnLoad = '{{ $showModalOnLoad }}'; 
 
     if(errorMessage){
         setTimeout(function() {
@@ -178,7 +191,9 @@ window.onload = function(){
     }    
     if(successMessage){
         setTimeout(function() {
-            showModal(successMessage, 'success');
+            // showModal(successMessage, 'success');
+            showContinueProcess();
+            showContinueProcessButton();
         }, 50);        
     }      
     if(showModalOnLoad){
@@ -233,6 +248,38 @@ function showModal(html, type) {
     });
 }
 
+function showContinueProcess()
+{
+    swal({
+        title: '<strong>Informasi</strong>',
+        html:'{!! $continueProcessHtml !!}',
+        showCloseButton: true,
+        showCancelButton: false,
+        showConfirmButton: false,            
+        focusConfirm: false,
+        type : "success"      
+    });  
+}
+
+function showContinueProcessButton()
+{
+    upper.style.visibility = "visible";
+    lower.style.visibility = "visible";      
+}
+
+function showTutorial()
+{    
+    swal({
+        title: '<strong>Tutorial Memesan Jadwal</strong>',
+        html:'{!! $bookingHtml !!}',
+        showCloseButton: true,
+        showCancelButton: false,
+        showConfirmButton: false,            
+        focusConfirm: false,
+        customClass: 'swal-wide',            
+    }); 
+}
+
 function showInformation(showModalOnLoad) {
     swal({
         title: (showModalOnLoad? "<h5 class='bg-warning'>Terdapat data filter tersimpan, apakah anda akan menerapkan data filter ini?</h5>" : "") + '<strong>Filter Detail</strong>',
@@ -277,6 +324,7 @@ function reserve (id, iteration)
             data: myFormData,
             success: function(data) {
                 linkElement.className = "timing selected";
+                showContinueProcessButton();                
             },
             error: function (e) {
                 alert(e.statusText);

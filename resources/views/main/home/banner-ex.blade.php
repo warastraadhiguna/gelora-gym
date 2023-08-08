@@ -6,41 +6,62 @@
 				<div class="banner-content aos" data-aos="fade-up">
 					<h1>{{ $company->name  }}<br/><span>{{ $company->tagline  }}</span></h1>
 					<img src="{{ URL::to('/')}}/assets/img/icons/header-icon.svg" class="header-icon" alt="header-icon">
-					<p>{{ $company->note  }}</p>
+					{{-- <p>{{ $company->note  }}</p> --}}
 					{{-- <a href="{{ URL::to('/building')}}" class="btn">Lihat Jadwal</a> --}}
-					<div class="banner-arrow-img">
+					{{-- <div class="banner-arrow-img">
 						<img src="{{ URL::to('/')}}/assets/img/down-arrow-img.png" class="img-fluid" alt="">
-					</div>
+					</div> --}}
 				</div>
 				<div class="search-box-one aos" >
 					<form action="{{ URL::to('/search-building')}}" method="POST">
 						@csrf
 						<div class="search-input search-line">
 							{{-- <i class="feather-search bficon"></i> --}}
-							<div class="form-group m-1">
+							<div class="form-group mb-0">
+								<input type="text" class="form-select datetimepicker" 
+								placeholder="Pilih Tanggal" onkeydown="return false"
+								name="date">									
 								<select style="border: 0;" class="form-select form-control" name="type_id" id="type_id_option" onchange="changeType()">
 									<option value="">-Pilih Gedung-</option>
 									@foreach ($types as $type)
 										<option value="{{ $type->id }}">{{ $type->name }}</option>
 									@endforeach
 								</select>		
-							</div>
-						</div>
-						<div class="search-input search-line">
-							<div class="form-group m-1">
-									<select style="border: 0;" class="form-select form-control" name="building_id" id="building_id_option">
+								<select style="border: 0;" class="form-select form-control" name="building_id" id="building_id_option">
 									<option value="">-Pilih Alamat-</option>
 									{{-- @foreach ($buildings as $building)
 										<option value="{{ $building->id }}">{{ $building->address }}</option>
 									@endforeach --}}
-								</select>	
+								</select>						
+							</div>
+						</div>
+						<div class="search-input search-line">
+							<div class="form-group mb-0">
+								<select style="border: 0;" class="form-select form-control" name="start_time">
+									<option value="">-Jam Awal Penggunaan-</option>
+									@foreach(GetTimes() as $time)
+										<option value="{{ $time }}">{{ $time }}</option>
+									@endforeach
+								</select>		
+								<select style="border: 0;" class="form-select form-control" name="end_time">
+									<option value="">-Jam Akhir Penggunaan-</option>
+									@foreach(GetTimes() as $time)
+										<option value="{{ $time }}">{{ $time}}</option>
+									@endforeach
+								</select>									
+                                <select  style="border: 0;" class="form-select form-control" name="court_quantity">
+                                    <option value="">-Jumlah Lapangan-</option>
+                                    @foreach(GetCourtQuantity() as $quantity)
+                                        <option value="{{ $quantity }}">{{ $quantity}}</option>
+                                    @endforeach
+                                </select>		
 							</div>							
 						</div>			
 
 						<div class="search-input search-calendar-line">
-							<div class="form-groupme-4 m-1">
+							<div class="form-group mt-5 me-4">
 								<div class="form-search-btn">
-										<button class="btn" type="submit">Pilih</button>
+										<button class="btn" type="submit">Cari</button>
 									</div>
 							</div>
 						</div>		

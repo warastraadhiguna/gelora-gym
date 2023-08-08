@@ -2,7 +2,7 @@
     @csrf       
     <div class="row">   
         <div class="col-md-12">         
-            <input type="text" class="form-control text-center btn-outline-dark border-0 text-danger bg" value="Isi semua filter detail untuk mendapatkan data tertentu." readonly/>
+            <input type="text" class="form-control text-center btn-outline-dark border-0 text-danger bg" value="Isi semua, untuk mendapatkan data tertentu." readonly/>
         </div>	
     </div>	        
     <hr/>      
@@ -12,7 +12,17 @@
             <div class="form-group">
                 <label>Tanggal Dipilih</label>                     
                 <input type="text" class="form-select datetimepicker" id="datepicker"  placeholder="Pilih Tanggal" onkeydown="return false" name="date" value="{{ $date ? DateFormat($date, "DD/MM/YYYY") : '' }}">	
-            </div>	             
+            </div>	    
+            <div class="form-group">
+                <label>Jumlah Lapangan</label>                    
+                <select class="form-select" name="court_quantity" >
+                    @foreach(GetCourtQuantity() as $quantity)
+                        <option value="{{ $quantity }}" {{ $court_quantity == $quantity ? "selected" : "" }}>{{ $quantity}}</option>
+                    @endforeach
+                </select>	
+            </div>	                 
+        </div>	
+        <div class="col-md-4">           
             <div class="form-group">
                 <label>Jam Awal</label>                
                 <select class="form-select"  name="start_time">
@@ -21,17 +31,7 @@
                         <option value="{{ $time }}" {{ $start_time == $time ? "selected" : "" }}>{{ $time }}</option>
                     @endforeach
                 </select>	
-            </div>	              
-        </div>	
-        <div class="col-md-4">           
-            <div class="form-group">
-                <label>Periode</label>                    
-                <select class="form-select" name="repeatedDay" >
-                    @foreach(GetRepeatedDays() as $repeatedDaySingle)
-                        <option value="{{ $repeatedDaySingle[0] }}" {{ $repeatedDay == $repeatedDaySingle[0] ? "selected" : "" }}>{{ $repeatedDaySingle[1]}}</option>
-                    @endforeach
-                </select>	
-            </div>	              
+            </div>	                        
             <div class="form-group">
                 <label>Jam Akhir</label>                      
                 <select class="form-select" name="end_time">
@@ -40,9 +40,17 @@
                         <option value="{{ $time }}" {{ $end_time == $time ? "selected" : "" }}>{{ $time}}</option>
                     @endforeach
                 </select>	
-            </div>	
+            </div>	            
         </div>	    
         <div class="col-md-4">       
+            <div class="form-group">
+                <label>Periode</label>                    
+                <select class="form-select" name="repeatedDay" >
+                    @foreach(GetRepeatedDays() as $repeatedDaySingle)
+                        <option value="{{ $repeatedDaySingle[0] }}" {{ $repeatedDay == $repeatedDaySingle[0] ? "selected" : "" }}>{{ $repeatedDaySingle[1]}}</option>
+                    @endforeach
+                </select>	
+            </div>	            
             <div class="form-group">
                 <label>Berulang</label>                    
                 <select class="form-select" name="repeatedPeriod" >
@@ -50,15 +58,7 @@
                         <option value="{{ $repeatedPeriodSingle[0] }}" {{ $repeatedPeriod == $repeatedPeriodSingle[0] ? "selected" : "" }}>{{ $repeatedPeriodSingle[1]}}</option>
                     @endforeach
                 </select>	
-            </div>	                 
-            <div class="form-group">
-                <label>Jumlah Lapangan</label>                    
-                <select class="form-select" name="court_quantity" >
-                    @foreach(GetCourtQuantity() as $quantity)
-                        <option value="{{ $quantity }}" {{ $court_quantity == $quantity ? "selected" : "" }}>{{ $quantity}}</option>
-                    @endforeach
-                </select>	
-            </div>	
+            </div>	 
         </div>	        
     </div>	 
     <br/>

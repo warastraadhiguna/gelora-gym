@@ -91,6 +91,8 @@ class WebBookingController extends Controller
         // dd($bookedSchedulesString);
 
         $html = view('main/booking/modal', array('building_id' => $building->id,'date' => $date,'start_time' => $start_time, 'end_time' => $end_time , 'court_quantity' => $court_quantity, 'repeatedDay' => $repeatedDay, 'repeatedPeriod' => $repeatedPeriod ))->render();
+        $bookingHtml = view('main/booking/booking-tutorial-modal')->render();
+        $continueProcessHtml = view('main/booking/continue-process-modal', array('building_id' => $building->id))->render();
 
         $data =[
             'content' => "main/booking/detail",
@@ -107,6 +109,8 @@ class WebBookingController extends Controller
             'bookedSchedulesString' => $bookedSchedulesString,
             'tempBookingDetailString' => $tempBookingDetailString,
             'html' =>  trim(preg_replace('/\s\s+/', ' ', $html)),
+            'bookingHtml' =>  trim(preg_replace('/\s\s+/', ' ', $bookingHtml)),
+            'continueProcessHtml' =>  trim(preg_replace('/\s\s+/', ' ', $continueProcessHtml)),
         ];
 
         return view("main.layouts.wrapper", $data);
@@ -121,7 +125,7 @@ class WebBookingController extends Controller
     }
 
     public function reserve(Request $request)
-    {     
+    {
         $schedule_id = $request->input("id");
         $iteration = $request->input("iteration");
 
@@ -280,7 +284,7 @@ class WebBookingController extends Controller
             ),
             'customer_details' => array(
                 'first_name' =>  $receipt->name,
-                'last_name' =>  '',                
+                'last_name' =>  '',
                 'email' => $receipt->email,
                 'phone' => $receipt->phone,
             ),
@@ -289,7 +293,7 @@ class WebBookingController extends Controller
         $snapToken = Snap::getSnapToken($params);
         $data =[
             'content' => "main/booking/midtrans-payment",
-            'receipt' => $receipt,            
+            'receipt' => $receipt,
             'snapToken' => $snapToken,
             'building' => $receipt->receiptDetails[0]->schedule->court->building,
             'nowTime' => \Carbon\Carbon::now()

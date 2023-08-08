@@ -67,9 +67,18 @@
                     <li class="{{ Request::is('blog*')? 'active' : '' }}">
                         <a href="{{ URL::to('/blog'); }}">Artikel</a>
                     </li>
-                    <li class="login-link">
-                        <a href="{{ URL::to('/login'); }}">Login</a>
+					@if(auth()->check())                    
+                    <li class="has-submenu login-link">
+                        <a href="">User <i class="fas fa-chevron-down"></i></a>
+                        <ul class="submenu">
+                            <li>
+                                <a href="{{ auth()->user()->role== "user"? URL::to('/dashboard') : URL::to('admin/dashboard') ; }}">Dashboard</a></li>
+                            <li>
+                                <a href="{{ URL::to('/logout'); }}">Logout</a>
+                            </li> 
+                        </ul>
                     </li>                    
+                    @endif	              
                 </ul>
             </div>
             <ul class="nav header-navbar-rht">

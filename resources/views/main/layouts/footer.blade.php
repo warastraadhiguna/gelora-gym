@@ -168,10 +168,20 @@
     <!-- Custom JS -->
     <script src="{{ URL::to('/')}}/assets/js/script.js"></script>
     <script>
+    const windowWidth = window.innerWidth;        
     $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip();   
-    });
-    
+
+    if($("#focusToElement").length > 0 && windowWidth<990) {
+        window.setTimeout( scrolltodiv, 50 );
+    }
+
+    function scrolltodiv(){
+        $('html, body').animate({
+            scrollTop: $("#focusToElement").offset().top
+        }, 2000);
+    }
+});    
     </script>
 </body>
 

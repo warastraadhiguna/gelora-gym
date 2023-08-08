@@ -1,5 +1,5 @@
 <!-- Breadcrumb -->
-<div class="breadcrumb-bar-two">
+{{-- <div class="breadcrumb-bar-two">
     <div class="container">
         <div class="row align-items-center inner-banner">
             <div class="col-md-12 col-12 text-center">
@@ -13,13 +13,13 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <!-- /Breadcrumb -->
 
 <!-- Page Content -->
 <div class="content">
     <div class="container-fluid">
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-md-12 col-lg-4 col-xl-3 theiaStickySidebar">
                 <form action="{{ URL::to('/search-building')}}" method="POST">
                     @csrf            
@@ -32,7 +32,7 @@
                         <div class="filter-widget">
                             <div>
                                 <select class="form-select" name="type_id">
-                                    <option value="">-Pilih Olahraga-</option>   
+                                    <option value="">-Pilih Gedung-</option>   
                                     @foreach ($types as $type)
                                         <option value="{{ $type->id }}" {{ $type_id == $type->id ? "selected" : "" }}>{{ $type->name }}</option>
                                     @endforeach
@@ -84,12 +84,12 @@
                         </div>                            
                         <hr/>                                                       
                         <div class="btn-search">
-                            <button type="submit" class="btn w-100">Cari</button>
+                            <button type="submit" class="btn w-100" id="focusToElement">Cari</button>
                         </div>	
                     </div>
                 </div>
                 <!-- /Search Filter -->    
-                </form>                        
+                </form>                       
             </div>
             
             <div class="col-md-12 col-lg-8 col-xl-9">
@@ -162,3 +162,9 @@
     </div>
 </div>		
 <!-- /Page Content -->
+<script>
+function myFunction() {
+  const element = document.getElementById("test");
+  element.scrollIntoView();
+}
+</script>

@@ -154,7 +154,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h1 class="text-center"><a href="{{ URL::to('/building')}}"><u>Pilih jadwal Anda terlebih dahulu!!</u></a></h1>
+                        <h1 class="text-center"><a href="{{ URL::to('/booking/' . $building->id)}}"><u>Pilih jadwal Anda terlebih dahulu!!</u></a></h1>
                     </div>
                 </div>
             </div>
