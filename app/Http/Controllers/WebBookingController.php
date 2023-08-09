@@ -233,11 +233,11 @@ class WebBookingController extends Controller
                     $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; ";
                 }
 
-                $weeklyBookingDetailExist = WeeklyBookingDetail::where([['schedule_id', $tempBookingDetail->schedule_id]])->first();
+                // $weeklyBookingDetailExist = WeeklyBookingDetail::where([['schedule_id', $tempBookingDetail->schedule_id]])->first();
 
-                if($weeklyBookingDetailExist) {
-                    $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; ";
-                }
+                // if($weeklyBookingDetailExist) {
+                //     $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; ";
+                // }
             }
 
             if($errorMessage) {
