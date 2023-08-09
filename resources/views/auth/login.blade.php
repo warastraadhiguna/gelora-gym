@@ -2,7 +2,7 @@
 <div class="content">
     <div class="container-fluid">
         
-        <div class="row">
+        <div class="row m-5">
             <div class="col-md-8 offset-md-2">
                 
                 <!-- Login Tab Content -->
@@ -23,7 +23,7 @@
 
                             <form action="{{ URL::to('/login/do'); }}" method="POST" autocomplete="off">
                                 @csrf
-                                <div class="form-group form-focus">
+                                {{-- <div class="form-group form-focus">
                                     <input type="text"  name="username" class="form-control floating @error('username') is-invalid @enderror">
                                     <label class="focus-label">Username</label>
                                     @error('username') 
@@ -45,10 +45,10 @@
                                 <div class="login-or">
                                     <span class="or-line"></span>
                                     <span class="span-or">atau</span>
-                                </div>
+                                </div> --}}
                                 <div class="row form-row social-login">
                                     <div class="col-12">
-                                        <a href="{{ url('authorized/google') }}" class="btn btn-secondary w-100"><i class="fab fa-google me-1"></i>Google Login</a>
+                                        <a href="{{ url('authorized/google') }}" class="btn btn-dark w-100"><i class="fab fa-google me-1"></i>Google Login</a>
                                     </div>
                                 </div>
                                 <div class="text-center dont-have">Belum punya akun? <a class="link-danger" href="{{ url('authorized/google') }}">Registrasi menggunakan Google</a></div>

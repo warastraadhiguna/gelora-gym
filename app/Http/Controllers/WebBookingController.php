@@ -273,6 +273,10 @@ class WebBookingController extends Controller
             Config::$is3ds = true;
 
             $receipt = Receipt::find($id);
+            if($receipt == null) {
+                return redirect("/");
+            }
+
             $total = 0;
             foreach ($receipt->receiptDetails as $receiptDetail) {
                 $total = $total + $receiptDetail->price;

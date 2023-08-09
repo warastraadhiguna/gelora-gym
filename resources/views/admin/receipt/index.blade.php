@@ -2,10 +2,10 @@
 
 <a href="{{ URL::to('/building'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i>
     Tambah</a>
-<button type="button" class="btn btn-info mb-3" data-toggle="modal"
+{{-- <button type="button" class="btn btn-info mb-3" data-toggle="modal"
     data-target="#filter-modal">
     <i class="fas fa-calendar-week"></i> Mingguan
-</button>       
+</button>        --}}
 <button type="button" class="btn btn-warning mb-3" data-toggle="modal"
     data-target="#filter-modal">
     <i class="fas fa-filter"></i> Filter
@@ -30,7 +30,7 @@
             <th width="5%">No</th>
             <th width="45%">Penyewa</th>
             <th width="40%">Detail</th>
-            <th width="10%">Action</th>
+            <th width="20%">Action</th>
         </tr>
     </thead>
     <tbody>
@@ -188,7 +188,7 @@
 
 
 </table>
-<div class="modal fade" id="weekly-modal">
+{{-- <div class="modal fade" id="weekly-modal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -217,7 +217,7 @@
         <!-- /.modal-content -->
     </div>
     <!-- /.modal-dialog -->
-</div>
+</div> --}}
 
 <div class="modal fade" id="update-modal">
     <div class="modal-dialog">

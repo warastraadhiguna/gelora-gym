@@ -62,7 +62,7 @@
                         </ul>
                     </li> --}}
                     <li class="{{ Request::is('building*')? 'active' : '' }}">
-                        <a href="{{ URL::to('/building'); }}">Pilih Olahraga</a>
+                        <a href="{{ URL::to('/building'); }}">Pilih Gedung</a>
                     </li>							
                     <li class="{{ Request::is('blog*')? 'active' : '' }}">
                         <a href="{{ URL::to('/blog'); }}">Artikel</a>

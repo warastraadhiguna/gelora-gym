@@ -24,6 +24,54 @@
 
         @if(count($tempBookingDetails) > 0)
         <div class="row">
+            <div class="col-md-7 col-lg-6 theiaStickySidebar">
+            
+                <!-- Booking Summary -->
+                <div class="card booking-card">
+                    <div class="card-header">
+                        <h4 class="card-title">Ringkasan Pemesanan</h4>
+                    </div>
+                    <div class="card-body">
+                    
+                        <!-- Booking Doctor Info -->
+                        <div class="booking-doc-info">
+                            <a href="{{ URL::to('/building') . "/" . $building->id }}" class="booking-doc-img">
+                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" alt="User Image">
+                            </a>
+                            <div class="booking-info">
+                                <h4><a href="{{ URL::to('/building') . "/" . $building->id }}">{{ $building->name }}</a></h4>
+                                <div class="clinic-details">
+                                    <p class="doc-location"><a target="_blank" href="{{ $building->google_location_url }}"><i class="fas fa-map-marker-alt me-2"></i><u> {{ $building->address }}</u></a></p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Booking Doctor Info -->
+                        
+                        <div class="booking-summary">
+                            <div class="booking-item-wrap">
+                                <ul class="booking-date">
+                                    <li>Waktu &nbsp;<span>{{ DateFormat($nowTime, " : D MMMM Y") }}</span></li>
+                                </ul>
+                                <ul class="booking-fee">
+                                    @foreach($tempBookingDetails as $tempBookingDetail)
+                                    <li><a onclick="deleteBooking({{ $tempBookingDetail->id }})" href="#" style="text-decoration:underline; color: red">hapus</a>{{ " " .$tempBookingDetail->schedule->court->name. '('. DateFormat($tempBookingDetail->booking_date, "D MMMM Y ") . $tempBookingDetail->schedule->operationalTime->name .')' }}  <span>Rp. {{ NumberFormat($tempBookingDetail->schedule->price) }}</span></li> 
+                                    @endforeach
+                                </ul>
+                                <div class="booking-total">
+                                    <ul class="booking-total-list">
+                                        <li>
+                                            <span>Total</span>
+                                            <span class="total-cost">Rp. {{ NumberFormat($total) }}</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Booking Summary -->
+                
+            </div>
             <div class="col-md-5 col-lg-6">
                 <div class="card">
                     <div class="card-body">
@@ -97,55 +145,6 @@
                         
                     </div>
                 </div>
-                
-            </div>
-            
-            <div class="col-md-7 col-lg-6 theiaStickySidebar">
-            
-                <!-- Booking Summary -->
-                <div class="card booking-card">
-                    <div class="card-header">
-                        <h4 class="card-title">Ringkasan Pemesanan</h4>
-                    </div>
-                    <div class="card-body">
-                    
-                        <!-- Booking Doctor Info -->
-                        <div class="booking-doc-info">
-                            <a href="{{ URL::to('/building') . "/" . $building->id }}" class="booking-doc-img">
-                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" alt="User Image">
-                            </a>
-                            <div class="booking-info">
-                                <h4><a href="{{ URL::to('/building') . "/" . $building->id }}">{{ $building->name }}</a></h4>
-                                <div class="clinic-details">
-                                    <p class="doc-location"><a target="_blank" href="{{ $building->google_location_url }}"><i class="fas fa-map-marker-alt me-2"></i><u> {{ $building->address }}</u></a></p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Booking Doctor Info -->
-                        
-                        <div class="booking-summary">
-                            <div class="booking-item-wrap">
-                                <ul class="booking-date">
-                                    <li>Waktu &nbsp;<span>{{ DateFormat($nowTime, " : D MMMM Y") }}</span></li>
-                                </ul>
-                                <ul class="booking-fee">
-                                    @foreach($tempBookingDetails as $tempBookingDetail)
-                                    <li><a onclick="deleteBooking({{ $tempBookingDetail->id }})" href="#" style="text-decoration:underline; color: red">hapus</a>{{ " " .$tempBookingDetail->schedule->court->name. '('. DateFormat($tempBookingDetail->booking_date, "D MMMM Y ") . $tempBookingDetail->schedule->operationalTime->name .')' }}  <span>Rp. {{ NumberFormat($tempBookingDetail->schedule->price) }}</span></li> 
-                                    @endforeach
-                                </ul>
-                                <div class="booking-total">
-                                    <ul class="booking-total-list">
-                                        <li>
-                                            <span>Total</span>
-                                            <span class="total-cost">Rp. {{ NumberFormat($total) }}</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Booking Summary -->
                 
             </div>
         </div>       

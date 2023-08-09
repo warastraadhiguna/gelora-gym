@@ -24,63 +24,6 @@
 <div class="content">
     <div class="container">
         <div class="row">
-            <div class="col-md-5 col-lg-6">
-                <div class="card">
-                    <div class="card-body">                    
-                    <!-- Checkout Form -->
-                        <!-- Personal Information -->
-                        <div class="info-widget">
-                            <h4 class="card-title">Data Pemesan</h4>
-                            <div class="row">
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="form-group card-label">
-                                        <label>Nama</label>
-                                        <input type="text"  name="name" class="form-control" value="{{ $receipt->name }}" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="form-group card-label">
-                                        <label>Email</label>
-                                        <input name="email" class="form-control" value="{{ $receipt->email}}" type="email" readonly>  
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="form-group card-label">
-                                        <label>Telepon</label>
-                                        <input name="phone" class="form-control" value="{{ $receipt->phone }}" type="text" readonly>
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-sm-12">
-                                    <div class="form-group card-label">
-                                        <label>Catatan</label>
-                                        <input name="note" class="form-control" type="text" value="{{ $receipt->note }}" readonly>        
-                                    </div>
-                                </div>                                    
-                            </div>
-                        </div>
-                        <!-- /Personal Information -->
-                        
-                        <div class="payment-widget">
-                            <!-- Terms Accept -->
-                            <div class="terms-accept">
-                              <div class="custom-checkbox">
-                                <label for="terms_accept"><a href="#">Bila jadwal belum dibayarkan, maka jadwal dapat dibooking pelanggan lain!</a></label>
-                              </div>
-                            </div>
-                            <!-- /Terms Accept -->                          
-                            <!-- Submit Section -->
-                            <div class="submit-section mt-4">
-                                <button class="btn btn-primary submit-btn" id="pay-button">Bayar Sekarang</button>    
-                            </div>
-                            <!-- /Submit Section -->
-                            
-                        </div>
-                    <!-- /Checkout Form -->                        
-                    </div>
-                </div>
-                
-            </div>
-            
             <div class="col-md-7 col-lg-6 theiaStickySidebar">
             
                 <!-- Booking Summary -->
@@ -133,6 +76,62 @@
                     </div>
                 </div>
                 <!-- /Booking Summary -->
+                
+            </div>
+            <div class="col-md-5 col-lg-6">
+                <div class="card">
+                    <div class="card-body">                    
+                    <!-- Checkout Form -->
+                        <!-- Personal Information -->
+                        <div class="info-widget">
+                            <h4 class="card-title">Data Pemesan</h4>
+                            <div class="row">
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group card-label">
+                                        <label>Nama</label>
+                                        <input type="text"  name="name" class="form-control" value="{{ $receipt->name }}" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group card-label">
+                                        <label>Email</label>
+                                        <input name="email" class="form-control" value="{{ $receipt->email}}" type="email" readonly>  
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group card-label">
+                                        <label>Telepon</label>
+                                        <input name="phone" class="form-control" value="{{ $receipt->phone }}" type="text" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-sm-12">
+                                    <div class="form-group card-label">
+                                        <label>Catatan</label>
+                                        <input name="note" class="form-control" type="text" value="{{ $receipt->note }}" readonly>        
+                                    </div>
+                                </div>                                    
+                            </div>
+                        </div>
+                        <!-- /Personal Information -->
+                        
+                        <div class="payment-widget">
+                            <!-- Terms Accept -->
+                            <div class="terms-accept">
+                              <div class="custom-checkbox">
+                                <label for="terms_accept"><a href="#">Bila jadwal belum dibayarkan dalam 30 menit, maka jadwal dapat dibooking pelanggan lain!</a></label>
+                              </div>
+                            </div>
+                            <!-- /Terms Accept -->                          
+                            <!-- Submit Section -->
+                            <div class="submit-section mt-4">
+                                <button class="btn btn-primary submit-btn" id="pay-button">Bayar Sekarang</button>    
+                            </div>
+                            <!-- /Submit Section -->
+                            
+                        </div>
+                    <!-- /Checkout Form -->                        
+                    </div>
+                </div>
                 
             </div>
         </div>    

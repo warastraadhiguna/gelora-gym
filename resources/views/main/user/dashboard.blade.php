@@ -48,11 +48,10 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Gedung</th>
-                                                        <th>No Nota</th>
-                                                        <th>Tanggal</th>
+                                                        <th>Nota</th>
                                                         <th>Biaya</th>               
                                                         <th>Status</th>
-                                                        <th>#</th>
+                                                        <th class="text-center">#</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -72,8 +71,8 @@
                                                             </h2>
                                                         </td>
                                                         <td> <span class="d-block text-info">{{ $receipt->number }}</span>
-                                                        </td>
-                                                        <td>{{ DateFormat($receipt->created_at, "D MMMM Y") }}</td>
+                                                            <small>{{ DateFormat($receipt->created_at, "D MMMM Y") }}</small>  
+                                                        </td> 
                                                         <td><?php 
                                                             $total = 0;
                                                             foreach ($receipt->receiptDetails as $receiptDetail) {
@@ -85,12 +84,18 @@
                                                         <td>
                                                             @include('main.booking.status')
                                                         </td>
-                                                        <td class="text-end">
+                                                        <td class="text-center">
                                                             <div class="table-action">
                                                                 <a target="_blank" href="{{ URL::to('/receipt') . "/" . $receipt->id}}"
                                                                     class="btn btn-sm bg-info-light">
                                                                     <i class="far fa-eye"></i> Lihat
                                                                 </a>
+                                                                @if($receipt->status=='0')
+                                                                <a target="_self" href="{{ URL::to('/midtrans-payment') . "/" . $receipt->id}}"
+                                                                    class="btn btn-sm btn-outline-danger">
+                                                                    <i class="fas fa-money-bill"></i> Bayar
+                                                                </a>
+                                                                @endif
                                                             </div>
                                                         </td>
                                                     </tr>

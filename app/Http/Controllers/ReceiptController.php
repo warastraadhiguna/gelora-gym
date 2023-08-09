@@ -67,7 +67,7 @@ class ReceiptController extends Controller
      */
     public function store(Request $request)
     {
-        $receipt_id = Request()->input("receipt_id");
+        $receipt_id = $request->input("receipt_id");
         if(!$receipt_id) {
             Alert::error('Error', "Pilih nota!!");
 
@@ -82,7 +82,7 @@ class ReceiptController extends Controller
         $data['updated_user_id'] = auth()->user()->id;
 
         if($receipt->status === '0' && $data['status'] === '2') {
-            Alert::error('Error', "Nota harus dibayar dahulu!!" . $receipt->status);
+            Alert::error('Error', "Nota harus dibayar dahulu!!");
 
             return redirect("/admin/receipt");
         }
