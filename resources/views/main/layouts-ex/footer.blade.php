@@ -10,7 +10,7 @@
 								<!-- Footer Widget -->
 								<div class="footer-widget footer-about">
 									<div class="footer-logo">
-										<img src="{{ URL::to('/storage'); }}/{{ $company->logo_url  }}" alt="logo">
+										<img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" alt="logo">
 									</div>
 									<div class="footer-about-content">
 										<p>{{ $company->note  }} </p>
@@ -39,7 +39,7 @@
 								<div class="footer-widget footer-menu">
 									<h2 class="footer-title">Gedung Olahraga</h2>
 									<ul>
-										<li><a href="{{ URL::to('/building'); }}">Cari Gedung</a></li>
+										<li><a href="{{ URL::to('/building') }}">Cari Gedung</a></li>
 									</ul>
 								</div>
 								<!-- /Footer Widget -->
@@ -142,28 +142,28 @@
 		}
 		</script>
 		<!-- jQuery -->
-		<script src="{{ URL::to('/assets/js/jquery-3.6.0.min.js'); }}"></script>
+		<script src="{{ URL::to('/assets/js/jquery-3.6.0.min.js') }}"></script>
 		
 		<!-- Bootstrap Core JS -->
-		<script src="{{ URL::to('/assets/js/bootstrap.bundle.min.js'); }}"></script>
+		<script src="{{ URL::to('/assets/js/bootstrap.bundle.min.js') }}"></script>
 		
 		<!-- Slick JS -->
-		<script src="{{ URL::to('/assets/js/slick.js'); }}"></script>
+		<script src="{{ URL::to('/assets/js/slick.js') }}"></script>
 
 
-		<script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/ResizeSensor.js'); }}"></script>
-		<script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js'); }}"></script>
+		<script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+		<script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
 
 		<!-- Datetimepicker JS -->
-		<script src="{{ URL::to('/assets/js/moment.min.js'); }}"></script>
-		<script src="{{ URL::to('/assets/js/bootstrap-datetimepicker.min.js'); }}"></script>
-		<script src="{{ URL::to('/assets/plugins/daterangepicker/daterangepicker.js'); }}"></script>
+		<script src="{{ URL::to('/assets/js/moment.min.js') }}"></script>
+		<script src="{{ URL::to('/assets/js/bootstrap-datetimepicker.min.js') }}"></script>
+		<script src="{{ URL::to('/assets/plugins/daterangepicker/daterangepicker.js') }}"></script>
 		<!-- Fancybox JS -->
-		<script src="{{ URL::to('/assets/plugins/fancybox/jquery.fancybox.min.js'); }}"></script>		
+		<script src="{{ URL::to('/assets/plugins/fancybox/jquery.fancybox.min.js') }}"></script>		
 
 
 
 		<!-- Custom JS -->
-		<script src="{{ URL::to('/assets/js/script.js'); }}"></script>		
+		<script src="{{ URL::to('/assets/js/script.js') }}"></script>		
 	</body>
 </html>

@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/admin/building/create'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
+<a href="{{ URL::to('/admin/building/create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
 
 
   <table id="example1" class="table table-bordered table-striped">
@@ -71,7 +71,7 @@
                               <tr>
                                 <td>Status Booking</td>
                                 <td>:</td>      
-                                <td>{{ $building->is_bookable === "1" ? "Bisa dibooking" : "Tidak bisa dibooking";  }}</td>
+                                <td>{{ $building->is_bookable === "1" ? "Bisa dibooking" : "Tidak bisa dibooking"  }}</td>
                               </tr>  
                               <tr>
                                 <td>Status</td>
@@ -81,7 +81,7 @@
                             </tbody>
                           </table>
                         </td>          
-                        <td class="align-middle"><img src="{{ URL::to('storage/' .$building->image_url); }}"  width="100%" alt=""></td>                 
+                        <td class="align-middle"><img src="{{ URL::to('storage/' .$building->image_url) }}"  width="100%" alt=""></td>                 
                         <td class="align-middle text-center">
                           <a href="{{ URL::to('/admin/court?building_id=' . $building->id) }}" class="btn btn-primary mr-2 mb-2  btn-sm"> <i class="fas fa-band-aid"></i> Lapangan</a>          
                           <a href="{{ URL::to('/admin/building/' . $building->id . "/edit") }}" class="btn btn-success mr-2 mb-2  btn-sm"> <i class="fas fa-edit"></i> Edit</a>  

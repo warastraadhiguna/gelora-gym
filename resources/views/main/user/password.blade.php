@@ -25,7 +25,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-12 col-lg-6">
-                                    <form action="{{ URL::to('/password'); }}" method="POST" autocomplete="off">
+                                    <form action="{{ URL::to('/password') }}" method="POST" autocomplete="off">
                                     @method('PUT')
                                     @csrf
                                     <div class="form-group">

@@ -109,7 +109,7 @@
                             <div class="doc-info-left">
                                 <div class="doctor-img">
                                     <a href="{{ URL::to('/building') . "/" . $building->id }}">
-                                        <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" class="img-fluid" alt="User Image">
+                                        <img src="{{ URL::to('/storage') . '/' .  $building->image_url }}" class="img-fluid" alt="User Image">
                                     </a>
                                 </div>
                                 <div class="doc-info-cont">
@@ -123,7 +123,7 @@
                                             </a>
                                     </p>
                                     
-                                    <p class="doc-department"><img src="{{ URL::to('/storage') . '/' .  $building->type->image_url; }}" class="img-fluid" alt="Speciality">{{ $building->type->name }}</p>
+                                    <p class="doc-department"><img src="{{ URL::to('/storage') . '/' .  $building->type->image_url }}" class="img-fluid" alt="Speciality">{{ $building->type->name }}</p>
 
                                     
                                     <div class="clinic-details">

@@ -1,8 +1,8 @@
 @if(isset($blog))
-<form action="{{ URL::to('/admin/web/blog/' . $blog->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/web/blog/' . $blog->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
 @else
-<form action="{{ URL::to('/admin/web/blog'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/web/blog') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
 @endif
     @csrf
 <div class="row">
@@ -68,7 +68,7 @@
                 @enderror        
                 
                 @if(isset($blog))
-                    <img src="{{ URL::to('storage/' .$blog->image_url); }}"  width="20%" alt="">
+                    <img src="{{ URL::to('storage/' .$blog->image_url) }}"  width="20%" alt="">
                 @endif
             </div>               
             <button type="submit" class="btn btn-primary">Simpan</button>

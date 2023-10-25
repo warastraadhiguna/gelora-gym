@@ -17,9 +17,9 @@ class WebUserController extends Controller
         $page = Request()->input("page");
         $page = $page ? $page : 1;
 
-        $data =[
+        $data = [
             'content' => "main/user/dashboard",
-            'receipts' => Receipt::with('receiptDetails')->where("user_id", auth()->user()->id)->limit($limit*$page)->orderby('created_at', 'desc')->get(),
+            'receipts' => Receipt::with('receiptDetails')->where("user_id", auth()->user()->id)->limit($limit * $page)->orderby('created_at', 'desc')->get(),
             'page' => $page,
             'limit' => $limit
         ];
@@ -29,7 +29,7 @@ class WebUserController extends Controller
 
     public function profile()
     {
-        $data =[
+        $data = [
             'content' => "main/user/profile",
         ];
 
@@ -65,7 +65,7 @@ class WebUserController extends Controller
 
     public function password()
     {
-        $data =[
+        $data = [
             'content' => "main/user/password",
         ];
 

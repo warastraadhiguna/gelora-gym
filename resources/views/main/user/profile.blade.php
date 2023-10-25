@@ -26,7 +26,7 @@
                 <div class="card">
                     <div class="card-body">
 
-                        <form action="{{ URL::to('/profile'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                        <form action="{{ URL::to('/profile') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
                             <div class="row form-row">
@@ -34,7 +34,7 @@
                                     <div class="form-group">
                                         <div class="change-avatar">
                                             <div class="profile-img">
-                                                <img src="{{ GetPhotoProfile(); }}" alt="User Image">
+                                                <img src="{{ GetPhotoProfile() }}" alt="User Image">
                                             </div>
                                             <div class="upload-img">
                                                 <div class="change-photo-btn">

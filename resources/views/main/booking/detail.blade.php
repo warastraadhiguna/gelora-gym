@@ -32,7 +32,7 @@
                     <div class="card-body">
                         <div class="booking-doc-info">
                             <a href="{{ URL::to('/building') . "/" . $building->id }}" class="booking-doc-img">
-                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" alt="User Image">
+                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url }}" alt="User Image">
                             </a>
                             <div class="booking-info">
                                 <h4><a href="{{ URL::to('/building') . "/" . $building->id }}">{{ $building->name }}</a></h4>

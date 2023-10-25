@@ -39,7 +39,7 @@
                         <!-- Blog Post -->
                         <div class="blog grid-blog">
                             <div class="blog-image">
-                                <a href="{{ URL::to('/blog') . "/" . $blog->id; }}"><img class="img-fluid" src="{{ URL::to('/storage'); }}/{{ $blog->image_url  }}" alt="Post Image"></a>
+                                <a href="{{ URL::to('/blog') . "/" . $blog->id }}"><img class="img-fluid" src="{{ URL::to('/storage') }}/{{ $blog->image_url  }}" alt="Post Image"></a>
                             </div>
                             <div class="blog-content">
                                 <ul class="entry-meta meta-item">
@@ -50,7 +50,7 @@
                                     </li>
                                     <li><i class="far fa-clock"></i> {{ DateFormat($blog->created_at, "D MMMM Y") }}</li>
                                 </ul>
-                                <h3 class="blog-title"><a href="{{ URL::to('/blog') . "/" . $blog->id; }}">{{ $blog->blogCategory->name }} – {{ $blog->title  }}</a></h3>
+                                <h3 class="blog-title"><a href="{{ URL::to('/blog') . "/" . $blog->id }}">{{ $blog->blogCategory->name }} – {{ $blog->title  }}</a></h3>
                                 <p class="mb-0">{{ $blog->summary }}</p>
                             </div>
                         </div>

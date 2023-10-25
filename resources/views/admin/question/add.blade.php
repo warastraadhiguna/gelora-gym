@@ -1,8 +1,8 @@
 @if(isset($question))
-<form action="{{ URL::to('/admin/web/question/' . $question->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/web/question/' . $question->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
 @else
-<form action="{{ URL::to('/admin/web/question'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/web/question') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
 @endif
     @csrf
 <div class="row">

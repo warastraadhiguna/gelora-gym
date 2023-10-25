@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/admin/building/type/create'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
+<a href="{{ URL::to('/admin/building/type/create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
 
 
   <table id="example1" class="table table-bordered table-striped">
@@ -18,7 +18,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $type->name  }}</td>
-                        <td class="align-middle"><img src="{{ URL::to('storage/' .$type->image_url); }}"  width="20%" alt=""></td>                            
+                        <td class="align-middle"><img src="{{ URL::to('storage/' .$type->image_url) }}"  width="20%" alt=""></td>                            
                         <td>{{ $type->index }}</td>                        
                         <td>
                             <div class="d-flex">

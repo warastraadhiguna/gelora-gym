@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-body">
                 @if(isset($type))
-                <form action="{{ URL::to('/admin/building/type/' . $type->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ URL::to('/admin/building/type/' . $type->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                     @method('PUT')
                 @else
-                <form action="{{ URL::to('/admin/building/type'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ URL::to('/admin/building/type') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                 @endif
                     @csrf
                     <div class="form-group">
@@ -31,7 +31,7 @@
                         @enderror        
                         
                         @if(isset($type))
-                            <img src="{{ URL::to('storage/' .$type->image_url); }}"  width="20%" alt="">
+                            <img src="{{ URL::to('storage/' .$type->image_url) }}"  width="20%" alt="">
                         @endif
                     </div>                        
 

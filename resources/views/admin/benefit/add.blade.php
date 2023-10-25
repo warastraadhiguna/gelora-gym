@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-body">
                 @if(isset($benefit))
-                <form action="{{ URL::to('/admin/web/benefit/' . $benefit->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ URL::to('/admin/web/benefit/' . $benefit->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                     @method('PUT')
                 @else
-                <form action="{{ URL::to('/admin/web/benefit'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+                <form action="{{ URL::to('/admin/web/benefit') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
                 @endif
                     @csrf
                     <div class="form-group">

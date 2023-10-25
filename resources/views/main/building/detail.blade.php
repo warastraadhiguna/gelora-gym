@@ -26,7 +26,7 @@
                 <div class="doctor-widget">
                     <div class="doc-info-left">
                         <div class="doctor-img">
-                            <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" class="img-fluid" alt="{{ $building->name }}">
+                            <img src="{{ URL::to('/storage') . '/' .  $building->image_url }}" class="img-fluid" alt="{{ $building->name }}">
                         </div>
                         <div class="doc-info-cont">
                             <h4 class="doc-name">{{ $building->name }}</h4>
@@ -35,7 +35,7 @@
                             <div class="clinic-details">
                                 <p class="doc-location"><a target="_blank" href="{{ $building->google_location_url }}"><i class="fas fa-map-marker-alt me-2"></i><u> {{ $building->address }}</u></a></p>
                                 <hr/>                                
-                                <p class="doc-department"><img src="{{ URL::to('/storage') . '/' .  $building->type->image_url; }}" class="img-fluid" alt="Speciality">{{  $building->type->name; }}</p>                                
+                                <p class="doc-department"><img src="{{ URL::to('/storage') . '/' .  $building->type->image_url }}" class="img-fluid" alt="Speciality">{{  $building->type->name }}</p>                                
                                 <ul class="clinic-gallery">
                                     @foreach($building->courts as $court)         
                                     <li>

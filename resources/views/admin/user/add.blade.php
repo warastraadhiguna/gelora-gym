@@ -1,8 +1,8 @@
 @if(isset($user))
-<form action="{{ URL::to('/admin/user/' . $user->id); }}" method="POST" autocomplete="off">
+<form action="{{ URL::to('/admin/user/' . $user->id) }}" method="POST" autocomplete="off">
     @method('PUT')
 @else
-<form action="{{ URL::to('/admin/user'); }}" method="POST" autocomplete="off">
+<form action="{{ URL::to('/admin/user') }}" method="POST" autocomplete="off">
 @endif
     @csrf
     <div class="row">

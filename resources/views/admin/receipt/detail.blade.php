@@ -7,7 +7,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="invoice-logo">
-                                    <img src="{{ URL::to('/storage'); }}/{{ $company->logo_url  }}" width="50%" alt="logo">
+                                    <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" width="50%" alt="logo">
                                 </div>
                             </div>
                             <div class="col-md-4">

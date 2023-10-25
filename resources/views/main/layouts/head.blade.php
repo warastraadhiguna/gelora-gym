@@ -12,7 +12,7 @@
 	  <title>{{ $company->name }} :. {{ $company->tagline }} </title>
 
     <!-- Favicon -->
-    <link rel="shortcut icon" href="{{ URL::to('/storage'); }}/{{ $company->icon_url  }}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ URL::to('/storage') }}/{{ $company->icon_url  }}" type="image/x-icon">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="{{ URL::to('/')}}/assets/css/bootstrap.min.css">

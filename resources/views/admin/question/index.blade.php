@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/admin/web/question/create'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus"
+<a href="{{ URL::to('/admin/web/question/create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus"
         aria-hidden="true"></i> Tambah</a>
 
 

@@ -10,14 +10,14 @@
                         <span></span>
                     </span>
                 </a>
-                <a href="{{ URL::to('/'); }}" class="navbar-brand logo">
-                    <img src="{{ URL::to('/storage'); }}/{{ $company->logo_url  }}" class="img-fluid" alt="Logo">
+                <a href="{{ URL::to('/') }}" class="navbar-brand logo">
+                    <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" class="img-fluid" alt="Logo">
                 </a>
             </div>
             <div class="main-menu-wrapper">
                 <div class="menu-header">
-                    <a href="{{ URL::to('/'); }}" class="menu-logo">
-                        <img src="{{ URL::to('/storage'); }}/{{ $company->logo_url  }}" class="img-fluid" alt="Logo">
+                    <a href="{{ URL::to('/') }}" class="menu-logo">
+                        <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" class="img-fluid" alt="Logo">
                     </a>
                     <a id="menu_close" class="menu-close" href="javascript:void(0);">
                         <i class="fas fa-times"></i>
@@ -25,7 +25,7 @@
                 </div>
                 <ul class="main-nav">
                     <li class="{{ Request::is('/')? 'active' : '' }}">
-                        <a href="{{ URL::to('/'); }}">Home</a>
+                        <a href="{{ URL::to('/') }}">Home</a>
                     </li>
                     {{-- <li class="has-submenu active">
                         <a href="javascript:void(0);">Patients <i class="fas fa-chevron-down"></i></a>
@@ -62,19 +62,19 @@
                         </ul>
                     </li> --}}
                     <li class="{{ Request::is('building*')? 'active' : '' }}">
-                        <a href="{{ URL::to('/building'); }}">Pilih Gedung</a>
+                        <a href="{{ URL::to('/building') }}">Pilih Gedung</a>
                     </li>							
                     <li class="{{ Request::is('blog*')? 'active' : '' }}">
-                        <a href="{{ URL::to('/blog'); }}">Artikel</a>
+                        <a href="{{ URL::to('/blog') }}">Artikel</a>
                     </li>
 					@if(auth()->check())                    
                     <li class="has-submenu login-link">
                         <a href="">User <i class="fas fa-chevron-down"></i></a>
                         <ul class="submenu">
                             <li>
-                                <a href="{{ auth()->user()->role== "user"? URL::to('/dashboard') : URL::to('admin/dashboard') ; }}">Dashboard</a></li>
+                                <a href="{{ auth()->user()->role== "user"? URL::to('/dashboard') : URL::to('admin/dashboard')  }}">Dashboard</a></li>
                             <li>
-                                <a href="{{ URL::to('/logout'); }}">Logout</a>
+                                <a href="{{ URL::to('/logout') }}">Logout</a>
                             </li> 
                         </ul>
                     </li>                    
@@ -87,27 +87,27 @@
                     <li class="nav-item dropdown has-arrow logged-item">
                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                             <span class="user-img">
-                                <img class="rounded-circle" src="{{ GetPhotoProfile(); }}" width="31" alt="{{ auth()->user()->name }}">
+                                <img class="rounded-circle" src="{{ GetPhotoProfile() }}" width="31" alt="{{ auth()->user()->name }}">
                             </span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end">
                             <div class="user-header">
                                 <div class="avatar avatar-sm">
-                                    <img src="{{ GetPhotoProfile(); }}" alt="User Image" class="avatar-img rounded-circle">
+                                    <img src="{{ GetPhotoProfile() }}" alt="User Image" class="avatar-img rounded-circle">
                                 </div>
                                 <div class="user-text">
                                     <h6>{{ auth()->user()->name }}</h6>
                                     <p class="text-muted mb-0">{{ auth()->user()->role }}</p>
                                 </div>
                             </div>
-                            <a class="dropdown-item" href="{{ auth()->user()->role== "user"? URL::to('/dashboard') : URL::to('admin/dashboard') ; }}">Dashboard</a>
-                            <a class="dropdown-item" href="{{ URL::to('/logout'); }}">Logout</a>
+                            <a class="dropdown-item" href="{{ auth()->user()->role== "user"? URL::to('/dashboard') : URL::to('admin/dashboard')  }}">Dashboard</a>
+                            <a class="dropdown-item" href="{{ URL::to('/logout') }}">Logout</a>
                         </div>
                     </li>
                     <!-- /User Menu -->
 					@else
                     <li class="register-btn">
-                        <a href="{{ URL::to('/login'); }}" class="btn btn-danger log-btn"><i class="feather-lock"></i>Login</a>
+                        <a href="{{ URL::to('/login') }}" class="btn btn-danger log-btn"><i class="feather-lock"></i>Login</a>
                     </li>
                     @endif	
                 

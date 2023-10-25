@@ -4,7 +4,7 @@
     <!-- Search -->
     <div class="card search-widget">
         <div class="card-body">
-            <form  class="search-form" action="{{ URL::to('/blog'); }}" method="POST" autocomplete="off">
+            <form  class="search-form" action="{{ URL::to('/blog') }}" method="POST" autocomplete="off">
             <div class="input-group">
                     @csrf
                     <input type="hidden" name="category" value="<?= isset($category)? $category : '0'; ?>"/>
@@ -26,13 +26,13 @@
                 @foreach ($lastestBlogs as $lastestBlog)	                            
                 <li>
                     <div class="post-thumb">
-                        <a href="{{ URL::to('/blog') . "/" . $lastestBlog->id; }}">
-                            <img class="img-fluid" src="{{ URL::to('/storage'); }}/{{ $lastestBlog->image_url  }}" alt="">
+                        <a href="{{ URL::to('/blog') . "/" . $lastestBlog->id }}">
+                            <img class="img-fluid" src="{{ URL::to('/storage') }}/{{ $lastestBlog->image_url  }}" alt="">
                         </a>
                     </div>
                     <div class="post-info">
                         <h4>
-                            <a href="{{ URL::to('/blog') . "/" . $lastestBlog->id; }}">{{ $lastestBlog->blogCategory->name . " - " .  $lastestBlog->title}}</a>
+                            <a href="{{ URL::to('/blog') . "/" . $lastestBlog->id }}">{{ $lastestBlog->blogCategory->name . " - " .  $lastestBlog->title}}</a>
                         </h4>
                         <p>{{ DateFormat($lastestBlog->created_at, "D MMMM Y") }}</p>
                     </div>

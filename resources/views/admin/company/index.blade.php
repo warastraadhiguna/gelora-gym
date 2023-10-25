@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<form action="{{ URL::to('/admin/company/' . $company->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/company/' . $company->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
     @csrf    
 <div class="row">
@@ -57,7 +57,7 @@
                 @enderror        
                 
                 @if(isset($company))
-                    <img src="{{ URL::to('storage/' .$company->logo_url); }}"  width="20%" alt="">
+                    <img src="{{ URL::to('storage/' .$company->logo_url) }}"  width="20%" alt="">
                 @endif
             </div>    
     </div>
@@ -104,7 +104,7 @@
             @enderror        
             
             @if(isset($company))
-                <img src="{{ URL::to('storage/' .$company->icon_url); }}"  width="20%" alt="">
+                <img src="{{ URL::to('storage/' .$company->icon_url) }}"  width="20%" alt="">
             @endif
         </div> 
     </div>

@@ -30,7 +30,7 @@
 		</div>
 	</div>
 	<div class="search-right-img">
-		<img src="{{ URL::to('/img/home-search.png'); }}" alt="">
+		<img src="{{ URL::to('/img/home-search.png') }}" alt="">
 	</div>
 </section>
 <!-- Search Section -->

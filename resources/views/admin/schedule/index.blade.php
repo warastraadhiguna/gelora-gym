@@ -2,7 +2,7 @@
 
 <div class="row">
     <div class="col">
-        <a href="{{ URL::to('/admin/schedule/create?court_id=') . $court_id; }}" id="add-button"
+        <a href="{{ URL::to('/admin/schedule/create?court_id=') . $court_id }}" id="add-button"
             style="visibility: {{ $court_id? 'visible' : 'hidden' }}" class="btn btn-primary mb-3"><i
                 class="fas fa-plus" aria-hidden="true"></i> Tambah/Ubah</a>
     </div>

@@ -6,7 +6,7 @@
                         <div class="col-lg-3 col-md-4">
                             <div class="footer-widget footer-about">
                                 <div class="footer-logo">
-                                    <img src="{{ URL::to('/storage'); }}/{{ $company->logo_url  }}" alt="logo">
+                                    <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" alt="logo">
                                 </div>
                                 <div class="footer-about-content">
                                     <p>{{ $company->note  }}</p>
@@ -17,7 +17,7 @@
                             <div class="footer-widget footer-menu">
                                 <h2 class="footer-title">Gedung Olahraga</h2>
                                 <ul>
-                                    <li><a href="{{ URL::to('/building'); }}">Pilih Olahraga</a></li>
+                                    <li><a href="{{ URL::to('/building') }}">Pilih Olahraga</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -134,8 +134,8 @@
     <!-- Feather Icon JS -->
     <script src="{{ URL::to('/')}}/assets/js/feather.min.js"></script>
 
-    <script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/ResizeSensor.js'); }}"></script>
-    <script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js'); }}"></script>
+    <script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/ResizeSensor.js') }}"></script>
+    <script src="{{ URL::to('/assets/plugins/theia-sticky-sidebar/theia-sticky-sidebar.js') }}"></script>
 
     <!-- Datepicker JS -->
     <script src="{{ URL::to('/')}}/assets/js/moment.min.js"></script>

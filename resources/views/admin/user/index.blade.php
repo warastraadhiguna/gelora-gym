@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/admin/user/create'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
+<a href="{{ URL::to('/admin/user/create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
   <table id="example1" class="table table-bordered table-striped">
     <thead>
         <tr>

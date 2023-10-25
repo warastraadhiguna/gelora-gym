@@ -4,7 +4,7 @@
 
 <div class="row">
   <div class="col">
-    <a href="{{ URL::to('/admin/court/create?building_id=') . $building_id; }}" id="add-button" style="visibility: {{ $building_id? 'visible' : 'hidden' }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a> 
+    <a href="{{ URL::to('/admin/court/create?building_id=') . $building_id }}" id="add-button" style="visibility: {{ $building_id? 'visible' : 'hidden' }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a> 
   </div>
   <div class="col-3">
     <select name="building_id" id="building_id" class="form-control" placeholder="Title" onchange="reloadPage()">
@@ -64,7 +64,7 @@
               </tbody>
             </table>
           </td>          
-          <td class="align-middle"><img src="{{ URL::to('storage/' .$court->image_url); }}"  width="100%" alt=""></td>                 
+          <td class="align-middle"><img src="{{ URL::to('storage/' .$court->image_url) }}"  width="100%" alt=""></td>                 
           <td class="align-middle text-center">
               {{-- <div class="d-flex"> --}}
                   <a href="{{ URL::to('/admin/schedule?court_id=' . $court->id) }}" class="btn btn-primary mb-1  btn-sm"> <i class="fas fa-calendar"></i> Jadwal</a>     

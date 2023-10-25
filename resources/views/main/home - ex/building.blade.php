@@ -14,12 +14,12 @@
 					<div class="profile-widget">
 						<div class="doc-img">
 							<a href="{{ URL::to('/building') . "/" . $building->id }}">
-								<img class="img-fluid" alt="User Image" src="{{ URL::to('/storage'); }}/{{ $building->image_url  }}" width="200px">
+								<img class="img-fluid" alt="User Image" src="{{ URL::to('/storage') }}/{{ $building->image_url  }}" width="200px">
 							</a>
 						</div>
 						<div class="pro-content">
 							<div class="specialities-img">
-								<img src="{{ URL::to('/storage'); }}/{{ $building->type->image_url  }}" alt="">
+								<img src="{{ URL::to('/storage') }}/{{ $building->type->image_url  }}" alt="">
 							</div>
 							<h5>{{ $building->type->name }}</h5>
 							<h3 class="title">

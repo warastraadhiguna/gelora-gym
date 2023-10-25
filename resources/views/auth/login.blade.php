@@ -9,7 +9,7 @@
                 <div class="account-content">
                     <div class="row align-items-center justify-content-center">
                         <div class="col-md-7 col-lg-6 login-left">
-                            <img src="{{ URL::to('/img/login.png'); }}" class="img-fluid" alt="Login">	
+                            <img src="{{ URL::to('/img/login.png') }}" class="img-fluid" alt="Login">	
                         </div>
                         <div class="col-md-12 col-lg-6 login-right">
                             <div class="login-header">
@@ -21,7 +21,7 @@
                             </div>                        
                             @endif
 
-                            <form action="{{ URL::to('/login/do'); }}" method="POST" autocomplete="off">
+                            <form action="{{ URL::to('/login/do') }}" method="POST" autocomplete="off">
                                 @csrf
                                 {{-- <div class="form-group form-focus">
                                     <input type="text"  name="username" class="form-control floating @error('username') is-invalid @enderror">

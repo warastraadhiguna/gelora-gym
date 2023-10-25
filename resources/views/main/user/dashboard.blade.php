@@ -63,7 +63,7 @@
                                                                 <a href="{{ URL::to('/building') . "/" . $receipt->receiptDetails[0]->schedule->court->building->id }}"
                                                                     class="avatar avatar-sm me-2">
                                                                     <img class="avatar-img rounded-circle"
-                                                                        src="{{ URL::to('/storage') . '/' .  $receipt->receiptDetails[0]->schedule->court->building->image_url; }}"
+                                                                        src="{{ URL::to('/storage') . '/' .  $receipt->receiptDetails[0]->schedule->court->building->image_url }}"
                                                                         alt="Building">
                                                                 </a>
                                                                 <a href="{{ URL::to('/building') . "/" . $receipt->receiptDetails[0]->schedule->court->building->id }}">{{ $receipt->receiptDetails[0]->schedule->court->building->name }}

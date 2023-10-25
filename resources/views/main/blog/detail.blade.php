@@ -23,7 +23,7 @@
                 <div class="blog-view">
                     <div class="blog blog-single-post">
                         <div class="blog-image">
-                            <a href="javascript:void(0);"><img alt="" src="{{ URL::to('/storage'); }}/{{ $blog->image_url  }}" class="img-fluid"></a>
+                            <a href="javascript:void(0);"><img alt="" src="{{ URL::to('/storage') }}/{{ $blog->image_url  }}" class="img-fluid"></a>
                         </div>
                         <h3 class="blog-title">{{ $blog->title  }} </h3>
                         <div class="blog-info clearfix">
@@ -50,7 +50,7 @@
                         </div>
                         <div class="card-body">
                             <ul class="social-share">
-                                <li><a target="_blank" href="https://api.whatsapp.com/send?text={{ $blog->title . '~' . URL::to('/blog') . '/' . $blog->id ;  }}" title="Whatsapp"><i class="fab fa-whatsapp"></i></a></li>
+                                <li><a target="_blank" href="https://api.whatsapp.com/send?text={{ $blog->title . '~' . URL::to('/blog') . '/' . $blog->id   }}" title="Whatsapp"><i class="fab fa-whatsapp"></i></a></li>
                             </ul>
                         </div>
                     </div>

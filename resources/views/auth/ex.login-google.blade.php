@@ -16,7 +16,7 @@
                     </div>                        
                     @endif
 
-                    <form action="{{ URL::to('/login/do'); }}" method="POST" autocomplete="off">
+                    <form action="{{ URL::to('/login/do') }}" method="POST" autocomplete="off">
                         @csrf
                         <div class="form-group">
                             <label for="">Username</label>
@@ -47,7 +47,7 @@
             </div>
         </div>           
         <div class="col-md-6">
-            <img src="{{ URL::to('/img/login.png'); }}" width="100%"/>
+            <img src="{{ URL::to('/img/login.png') }}" width="100%"/>
         </div>        
     </div>
 </div>

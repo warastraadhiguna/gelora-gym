@@ -19,7 +19,7 @@
                             <div class="doc-pro-img">
                                 <a href="{{ URL::to('/building') . "/" . $building->id }}">
                                     <div class="doctor-profile-img">
-                                        <img src="{{ URL::to('/storage'); }}/{{ $building->image_url  }}" class="img-fluid" alt="">
+                                        <img src="{{ URL::to('/storage') }}/{{ $building->image_url  }}" class="img-fluid" alt="">
                                     </div>
                                 </a>
                                 {{-- <div class="doctor-amount">

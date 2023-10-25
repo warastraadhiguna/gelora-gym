@@ -1,8 +1,8 @@
 @if(isset($building))
-<form action="{{ URL::to('/admin/building/' . $building->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/building/' . $building->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
 @else
-<form action="{{ URL::to('/admin/building'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/building') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
 @endif
     @csrf
 <div class="row">
@@ -87,7 +87,7 @@
                 @enderror        
                 
                 @if(isset($building))
-                    <img src="{{ URL::to('storage/' .$building->image_url); }}"  width="20%" alt="">
+                    <img src="{{ URL::to('storage/' .$building->image_url) }}"  width="20%" alt="">
                 @endif
             </div>               
             <button type="submit" class="btn btn-primary">Simpan</button>

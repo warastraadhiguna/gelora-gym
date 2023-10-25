@@ -3,10 +3,10 @@
         <div class="card">
             <div class="card-body">
                 @if(isset($blogCategory))
-                <form action="{{ URL::to('/admin/web/blog-category/' . $blogCategory->id); }}" method="POST" autocomplete="off">
+                <form action="{{ URL::to('/admin/web/blog-category/' . $blogCategory->id) }}" method="POST" autocomplete="off">
                     @method('PUT')
                 @else
-                <form action="{{ URL::to('/admin/web/blog-category'); }}" method="POST" autocomplete="off">
+                <form action="{{ URL::to('/admin/web/blog-category') }}" method="POST" autocomplete="off">
                 @endif
                     @csrf
                     <div class="form-group">

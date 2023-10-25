@@ -11,7 +11,7 @@
     <ul class="navbar-nav ml-auto">
 
       <li class="nav-item">
-        <a class="nav-link" href="{{ URL::to('/logout'); }}" role="button">
+        <a class="nav-link" href="{{ URL::to('/logout') }}" role="button">
           <i class="fas fa-sign-out-alt"></i>
         </a>
       </li>

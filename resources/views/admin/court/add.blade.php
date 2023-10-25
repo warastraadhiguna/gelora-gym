@@ -1,8 +1,8 @@
 @if(isset($court))
-<form action="{{ URL::to('/admin/court/' . $court->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/court/' . $court->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
 @else
-<form action="{{ URL::to('/admin/court'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/court') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
 @endif
     @csrf
 <input type="hidden" name="building_id" value="{{ $building_id }}"/>
@@ -39,7 +39,7 @@
             @enderror        
             
             @if(isset($court))
-                <img src="{{ URL::to('storage/' .$court->image_url); }}"  width="20%" alt="">
+                <img src="{{ URL::to('storage/' .$court->image_url) }}"  width="20%" alt="">
             @endif
         </div>               
         <button type="submit" class="btn btn-primary">Simpan</button>

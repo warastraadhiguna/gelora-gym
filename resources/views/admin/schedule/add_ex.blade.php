@@ -1,4 +1,4 @@
-<form action="{{ URL::to('/admin/schedule'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/schedule') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="court_id" value="{{ $court_id }}" />
     <div id="loading" class="display-4 text-center">

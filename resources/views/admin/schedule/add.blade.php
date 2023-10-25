@@ -1,5 +1,5 @@
 @include('sweetalert::alert')
-<form action="{{ URL::to('/admin/schedule'); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/schedule') }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @csrf
     <input type="hidden" name="court_id" value="{{ $court_id }}" />
     <div id="loading" class="display-4 text-center">
@@ -29,7 +29,7 @@
             @if($operational_day_id)
             <button type="submit" class="btn btn-primary">Simpan</button>
             @endif
-            <a href="{{ URL::to('/admin/schedule?court_id=' . $court_id); }}" class="btn btn-warning">Kembali</a>            
+            <a href="{{ URL::to('/admin/schedule?court_id=' . $court_id) }}" class="btn btn-warning">Kembali</a>            
         </div>
     </div>
     <div id="schedule" style="display: none">

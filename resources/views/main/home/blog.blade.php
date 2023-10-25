@@ -16,9 +16,9 @@
                         <div class="articles-grid w-100">
                             <div class="articles-info">
                                 <div class="articles-left">
-                                    <a href="{{ URL::to('/blog') . "/" . $blog->id; }}">
+                                    <a href="{{ URL::to('/blog') . "/" . $blog->id }}">
                                         <div class="articles-img">
-                                            <img src="{{ URL::to('/storage'); }}/{{ $blog->image_url  }}" class="img-fluid" alt="">
+                                            <img src="{{ URL::to('/storage') }}/{{ $blog->image_url  }}" class="img-fluid" alt="">
                                         </div>
                                     </a>
                                 </div>
@@ -33,10 +33,10 @@
                                             </li>
                                         </ul>
                                         <h4>
-                                            <a href="{{ URL::to('/blog') . "/" . $blog->id; }}">5 {{ $blog->title }}</a>
+                                            <a href="{{ URL::to('/blog') . "/" . $blog->id }}">5 {{ $blog->title }}</a>
                                         </h4>
                                         <p>{{ $blog->summary }}</p>
-                                        <a href="{{ URL::to('/blog') . "/" . $blog->id; }}" class="btn">Lanjut baca</a>
+                                        <a href="{{ URL::to('/blog') . "/" . $blog->id }}" class="btn">Lanjut baca</a>
                                     </div>
                                 </div>
                             </div>

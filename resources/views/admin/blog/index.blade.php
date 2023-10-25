@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/admin/web/blog/create'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
+<a href="{{ URL::to('/admin/web/blog/create') }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i> Tambah</a>  
 
 
   <table id="example1" class="table table-bordered table-striped">
@@ -42,7 +42,7 @@
                             </tbody>
                           </table>
                         </td>          
-                        <td class="align-middle"><img src="{{ URL::to('storage/' .$blog->image_url); }}"  width="100%" alt=""></td>                 
+                        <td class="align-middle"><img src="{{ URL::to('storage/' .$blog->image_url) }}"  width="100%" alt=""></td>                 
                         <td class="align-middle">
                             <div class="d-flex">
                                 <a href="{{ URL::to('/admin/web/blog/' . $blog->id . "/edit") }}" class="btn btn-success mx-2  btn-sm"> <i class="fas fa-edit"></i> Edit</a>  

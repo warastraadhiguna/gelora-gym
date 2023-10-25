@@ -36,7 +36,7 @@
                         <!-- Booking Doctor Info -->
                         <div class="booking-doc-info">
                             <a href="{{ URL::to('/building') . "/" . $building->id }}" class="booking-doc-img">
-                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url; }}" alt="User Image">
+                                <img src="{{ URL::to('/storage') . '/' .  $building->image_url }}" alt="User Image">
                             </a>
                             <div class="booking-info">
                                 <h4><a href="{{ URL::to('/building') . "/" . $building->id }}">{{ $building->name }}</a></h4>
@@ -77,7 +77,7 @@
                     <div class="card-body">
                     
                         <!-- Checkout Form -->
-                        <form action="{{ URL::to('/payment'); }}" method="POST" autocomplete="off" >
+                        <form action="{{ URL::to('/payment') }}" method="POST" autocomplete="off" >
                         @csrf
                             <!-- Personal Information -->
                             <div class="info-widget">

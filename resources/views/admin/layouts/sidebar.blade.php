@@ -1,8 +1,8 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="{{ URL::to('/'); }}/admin/dashboard" class="brand-link">
-      <img src="{{ URL::to('/storage'); }}/{{ $company->icon_url  }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="{{ URL::to('/') }}/admin/dashboard" class="brand-link">
+      <img src="{{ URL::to('/storage') }}/{{ $company->icon_url  }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
       <span class="brand-text font-weight-light">Administrator</span>
     </a>
 
@@ -14,7 +14,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item">
-            <a href="{{ URL::to('/admin/dashboard'); }}" class="nav-link {{ Request::is('admin/dashboard')? 'active' : '' }}">
+            <a href="{{ URL::to('/admin/dashboard') }}" class="nav-link {{ Request::is('admin/dashboard')? 'active' : '' }}">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Dashboard
@@ -31,13 +31,13 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/company'); }}" class="nav-link {{ Request::is('admin/company*')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/company') }}" class="nav-link {{ Request::is('admin/company*')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Detail</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/social-media'); }}" class="nav-link {{ Request::is('admin/social-media*')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/social-media') }}" class="nav-link {{ Request::is('admin/social-media*')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon  ml-3"></i>
                   <p>Social Media</p>
                 </a>
@@ -54,7 +54,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/web/banner'); }}" class="nav-link {{ Request::is('admin/web/banner')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/web/banner') }}" class="nav-link {{ Request::is('admin/web/banner')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Banner</p>
                 </a>
@@ -62,7 +62,7 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/web/benefit'); }}" class="nav-link {{ Request::is('admin/web/benefit')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/web/benefit') }}" class="nav-link {{ Request::is('admin/web/benefit')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Benefit</p>
                 </a>
@@ -70,7 +70,7 @@
             </ul>      
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/web/blog-category'); }}" class="nav-link {{ Request::is('admin/web/blog-category')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/web/blog-category') }}" class="nav-link {{ Request::is('admin/web/blog-category')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Kategori Blog</p>
                 </a>
@@ -78,7 +78,7 @@
             </ul>         
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/web/blog'); }}" class="nav-link {{ Request::is('admin/web/blog')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/web/blog') }}" class="nav-link {{ Request::is('admin/web/blog')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Blog</p>
                 </a>
@@ -86,7 +86,7 @@
             </ul>     
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/web/question'); }}" class="nav-link {{ Request::is('admin/web/question')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/web/question') }}" class="nav-link {{ Request::is('admin/web/question')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Pertanyaan Umum</p>
                 </a>
@@ -103,7 +103,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/building/type'); }}" class="nav-link {{ Request::is('admin/building/type')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/building/type') }}" class="nav-link {{ Request::is('admin/building/type')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Jenis Gedung</p>
                 </a>
@@ -111,7 +111,7 @@
             </ul>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/building'); }}" class="nav-link {{ Request::is('admin/building')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/building') }}" class="nav-link {{ Request::is('admin/building')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Data Gedung</p>
                 </a>
@@ -119,7 +119,7 @@
             </ul>       
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/court'); }}" class="nav-link {{ Request::is('admin/court*')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/court') }}" class="nav-link {{ Request::is('admin/court*')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Data Lapangan</p>
                 </a>
@@ -127,7 +127,7 @@
             </ul>     
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/schedule'); }}" class="nav-link {{ Request::is('admin/schedule*')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/schedule') }}" class="nav-link {{ Request::is('admin/schedule*')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Data Jadwal</p>
                 </a>
@@ -152,7 +152,7 @@
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ URL::to('/admin/receipt'); }}" class="nav-link  {{ Request::is('admin/receipt*')? 'active' : '' }}">
+                <a href="{{ URL::to('/admin/receipt') }}" class="nav-link  {{ Request::is('admin/receipt*')? 'active' : '' }}">
                   <i class="far fa-circle nav-icon ml-3"></i>
                   <p>Data Nota Sewa</p>
                 </a>
@@ -160,7 +160,7 @@
             </ul>
           </li>                          
           <li class="nav-item">
-            <a href="{{ URL::to('/admin/user'); }}" class="nav-link {{ Request::is('admin/user*')? 'active' : '' }}">
+            <a href="{{ URL::to('/admin/user') }}" class="nav-link {{ Request::is('admin/user*')? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
               <p>
                 User

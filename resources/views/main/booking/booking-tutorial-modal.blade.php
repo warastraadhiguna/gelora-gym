@@ -15,7 +15,7 @@
     <div class="row">
         <div class="col-md-12">       
             <div class="form-group">
-                <img src="{{ asset('/img/booking.gif'); }}" alt="Cara Booking" width="45%">  
+                <img src="{{ asset('/img/booking.gif') }}" alt="Cara Booking" width="45%">  
             </div> 
         </div>	        
     </div>	
@@ -29,7 +29,7 @@
     <div class="row">
         <div class="col-md-12">       
             <div class="form-group">
-                <img src="{{ asset('/img/booking1.gif'); }}" alt="Cara Booking" width="45%">  
+                <img src="{{ asset('/img/booking1.gif') }}" alt="Cara Booking" width="45%">  
             </div> 
         </div>	        
     </div>	

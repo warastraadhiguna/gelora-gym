@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<form action="{{ URL::to('/admin/social-media/' . $company->id); }}" method="POST" autocomplete="off" enctype="multipart/form-data">
+<form action="{{ URL::to('/admin/social-media/' . $company->id) }}" method="POST" autocomplete="off" enctype="multipart/form-data">
     @method('PUT')
     @csrf    
 <div class="row">

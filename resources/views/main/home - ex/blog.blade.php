@@ -12,8 +12,8 @@
 			<?php $blog =  $lastestBlogs[$i]?>
 				<div class="col-12 col-md-6 col-lg-4">
 				<div class="blog-widget">
-					<a href="{{ URL::to('/blog') . "/" . $blog->id; }}" class="blog-img">
-						<img src="{{ URL::to('/storage'); }}/{{ $blog->image_url  }}" alt="">
+					<a href="{{ URL::to('/blog') . "/" . $blog->id }}" class="blog-img">
+						<img src="{{ URL::to('/storage') }}/{{ $blog->image_url  }}" alt="">
 					</a>
 					<div class="date-col">
 						<span>{{ DateFormat($blog->created_at, "D MMMM Y") }}</span>
@@ -22,7 +22,7 @@
 						<h6>{{ $blog->blogCategory->name }}</h6>
 						<h5>{{ $blog->title }}</h5>
 						<p>{{ $blog->summary }}</p>
-						<a href="{{ URL::to('/blog') . "/" . $blog->id; }}" class="readmore-btn" tabindex="-1"><i class="fas fa-chevron-circle-right"></i> Lanjut baca</a>
+						<a href="{{ URL::to('/blog') . "/" . $blog->id }}" class="readmore-btn" tabindex="-1"><i class="fas fa-chevron-circle-right"></i> Lanjut baca</a>
 					</div>
 				</div>
 				</div>

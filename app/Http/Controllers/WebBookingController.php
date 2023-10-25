@@ -46,11 +46,11 @@ class WebBookingController extends Controller
         $repeatedDay = $repeatedDay ? $repeatedDay : 1;
         $repeatedPeriod = $repeatedPeriod ? $repeatedPeriod : 0;
 
-        $showModalOnLoad = !$filter && ($date|| $start_time|| $end_time);
+        $showModalOnLoad = !$filter && ($date || $start_time || $end_time);
 
         $nowTime = \Carbon\Carbon::now();
         $nowDate = $nowTime;
-        $nowTime->addDay($page*7);
+        $nowTime->addDay($page * 7);
         $nowTimes = array(); //time for every court, every court should has their our time
         foreach ($building->courts as $key => $court) {
             $nowTimes[$key] =  DateConvert(DateFormat($nowTime, "Y/M/D"));
@@ -66,11 +66,11 @@ class WebBookingController extends Controller
         $bookingDetails = ReceiptDetail::where([['booking_date','>=',DateFormat($nowTime, "YYYY/MM/DD")]])->get();
 
         $bookedSchedulesString = "";
-        for ($i=0; $i < count($bookingDetails); $i++) {
+        for ($i = 0; $i < count($bookingDetails); $i++) {
             $bookingDetail = $bookingDetails[$i];
 
             $interval = date_create($nowTime->toDateString())->diff(date_create($bookingDetail->booking_date));
-            $bookedSchedulesString = $bookedSchedulesString . 'link_' . $bookingDetail->schedule_id . '_' . ($page*7 + $interval->format("%d")) . ";";
+            $bookedSchedulesString = $bookedSchedulesString . 'link_' . $bookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
         }
 
 
@@ -78,7 +78,7 @@ class WebBookingController extends Controller
         $tempBookingDetailString = "";
         foreach ($tempBookingDetails as $key => $tempBookingDetail) {
             $interval = date_create($nowTime->toDateString())->diff(date_create($tempBookingDetail->booking_date));
-            $tempBookingDetailString = $tempBookingDetailString . 'link_' . $tempBookingDetail->schedule_id . '_' . ($page*7 + $interval->format("%d")) . ";";
+            $tempBookingDetailString = $tempBookingDetailString . 'link_' . $tempBookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
         }
 
 
@@ -94,7 +94,7 @@ class WebBookingController extends Controller
         $bookingHtml = view('main/booking/booking-tutorial-modal')->render();
         $continueProcessHtml = view('main/booking/continue-process-modal', array('building_id' => $building->id))->render();
 
-        $data =[
+        $data = [
             'content' => "main/booking/detail",
             'building' => $building,
             'nowDayNumber' => $nowTime->dayOfWeek,
@@ -121,7 +121,7 @@ class WebBookingController extends Controller
         $post = Request()->all();
         $date = $post['date'] ? DateFormat(str_replace('/', '-', $post['date']), 'YYYY-MM-DD') : "";
 
-        return redirect("/booking". "/" . $post['building_id'] ."?date=" . $date . "&start_time=". $post['start_time'] . "&end_time=" . $post['end_time']. "&court_quantity=" . $post['court_quantity']. "&repeatedDay=" . $post['repeatedDay'] . "&repeatedPeriod=" . $post['repeatedPeriod']. "&filter=1");
+        return redirect("/booking" . "/" . $post['building_id'] . "?date=" . $date . "&start_time=" . $post['start_time'] . "&end_time=" . $post['end_time'] . "&court_quantity=" . $post['court_quantity'] . "&repeatedDay=" . $post['repeatedDay'] . "&repeatedPeriod=" . $post['repeatedPeriod'] . "&filter=1");
     }
 
     public function reserve(Request $request)
@@ -132,8 +132,8 @@ class WebBookingController extends Controller
         $nowTime = \Carbon\Carbon::now();
         $nowTime->addDay($iteration);
 
-        $data=[
-            'user_id'=> auth()->user()->id,
+        $data = [
+            'user_id' => auth()->user()->id,
             'schedule_id' => $schedule_id,
             'booking_date' => DateFormat($nowTime, "Y/M/D")
         ];
@@ -166,7 +166,7 @@ class WebBookingController extends Controller
             $total = $total + $tempBookingDetail->schedule->price;
         }
 
-        $data =[
+        $data = [
             'content' => "main/booking/checkout",
             'building' => Building::find($id),
             'nowTime' => $nowTime,
@@ -296,7 +296,7 @@ class WebBookingController extends Controller
             );
 
             $snapToken = Snap::getSnapToken($params);
-            $data =[
+            $data = [
                 'content' => "main/booking/midtrans-payment",
                 'receipt' => $receipt,
                 'snapToken' => $snapToken,
@@ -314,12 +314,12 @@ class WebBookingController extends Controller
     public function midtransCallback(Request $request)
     {
         $serverKey = config('midtrans.server_key');
-        $hashed = hash("sha512", $request->order_id.$request->status_code.$request->gross_amount.$serverKey);
+        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
         if($hashed == $request->signature_key) {
             if($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $receipt = Receipt::find($request->order_id);
-                $receipt->update(['status'=>'1']);
+                $receipt->update(['status' => '1']);
             }
         }
     }
@@ -337,7 +337,7 @@ class WebBookingController extends Controller
 
         $building_id = $receipt->receiptDetails[0]->schedule->court->building_id;
 
-        $data =[
+        $data = [
             'content' => "main/booking/success",
             'building' => Building::find($building_id),
             'receipt' => $receipt,
@@ -359,7 +359,7 @@ class WebBookingController extends Controller
 
         $building_id = $receipt->receiptDetails[0]->schedule->court->building_id;
 
-        $data =[
+        $data = [
             'content' => "main/booking/receipt",
             'building' => Building::find($building_id),
             'receipt' => $receipt,
@@ -405,7 +405,7 @@ class WebBookingController extends Controller
 
                 $tempBookingPerScheduleArray = array();
                 $tempBookingPerScheduleIndex = 0;
-                for ($i=0; $i <= $repeatedPeriod; $i++) {
+                for ($i = 0; $i <= $repeatedPeriod; $i++) {
                     $repeatedFormula = $repeatedDayValue == 0 ? $i : $repeatedDayValue * $i;
 
                     $choosenDate = DateConvert($dateStringDefault)->addDay($repeatedFormula);
@@ -446,7 +446,7 @@ class WebBookingController extends Controller
 
             $tempBookingDetails = array();
             $tempBookingDetailIndex = 0;
-            for($i=0; $i<$court_quantity; $i++) {
+            for($i = 0; $i < $court_quantity; $i++) {
                 foreach ($tempBookingPerCourtArray[$i] as $tempBookingPerSchedule) {
                     $tempBookingDetails[$tempBookingDetailIndex] = $tempBookingPerSchedule;
                     $tempBookingDetailIndex++;

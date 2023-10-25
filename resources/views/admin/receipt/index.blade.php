@@ -1,6 +1,6 @@
 @include('sweetalert::alert')
 
-<a href="{{ URL::to('/building'); }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i>
+<a href="{{ URL::to('/building') }}" class="btn btn-primary mb-3"><i class="fas fa-plus" aria-hidden="true"></i>
     Tambah</a>
 {{-- <button type="button" class="btn btn-info mb-3" data-toggle="modal"
     data-target="#filter-modal">
@@ -229,7 +229,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form action="{{ URL::to('/admin/receipt'); }}" method="POST" autocomplete="off">
+                <form action="{{ URL::to('/admin/receipt') }}" method="POST" autocomplete="off">
                     @csrf
                     <input type="hidden" name="receipt_id" id="receipt_id"/>
                     <div class="form-group">
