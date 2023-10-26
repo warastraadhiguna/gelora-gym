@@ -285,7 +285,7 @@ class WebBookingController extends Controller
             DB::commit();
 
             //3 for blocking data
-            if($data['status'] && $data['status'] === "3") {
+            if(isset($data['status']) && $data['status'] === "3") {
                 return redirect("admin/receipt");
 
             } else {
