@@ -1,14 +1,31 @@
-@include('sweetalert::alert')
+{{-- sebelum dipersingkat --}}
+<div class="breadcrumb-bar">
+    <div class="container-fluid">
+        <div class="row align-items-center">
+            <div class="col-md-12 col-12">
+                <nav aria-label="breadcrumb" class="page-breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Detail Nota</li>
+                    </ol>
+                </nav>
+                <h2 class="breadcrumb-title">Detail Nota</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-lg-8 offset-lg-2">
                 <div class="invoice-content">
                     <div class="invoice-item">
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="invoice-logo">
-                                    <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" width="50%" alt="logo">
+                                    <img src="{{ URL::to('/storage') }}/{{ $company->logo_url  }}" alt="logo">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -59,34 +76,23 @@
                                     <table class="invoice-table table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Lapangan</th>
-                                                <th class="text-center">Tanggal</th>
+                                                <th width="20%">Lapangan</th>
+                                                <th  width="25%" class="text-center">Tanggal</th>
                                                 <th class="text-center">Jadwal</th>
-                                                <th class="text-center">Harga</th>
-                                                @if($receipt->status !== '2' )
-                                                <th class="text-center">#</th>
-                                                @endif
+                                                <th  width="20%" class="text-center">Harga</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach($receiptDetailArray as $receipsDetail)
+                                            <?php $total=0; ?>
+                                            @foreach($receipt->receiptDetails as $receipsDetail)
                                             <tr>
 
-                                                <td class="align-center">{{ $receipsDetail['court']}}</td>
-                                                <td class="align-center"> 
-                                                    {{ $receipsDetail['date']}}
-                                                </td>
-                                                <td class="text-center align-center">{{ $receipsDetail['schedule']}}</td>
-                                                <td class="text-center align-center">Rp. {{ NumberFormat($receipsDetail['price']) }}</td>
-                                                @if($receipt->status !== '2' )
-                                                <th class="text-center align-center">
-                                                    <button type="button" class="btn btn-warning" data-toggle="modal"
-                                                        data-target="#update-modal" onclick="AddReceiptId({{ $receipt->id }}, '{{ $receipsDetail['real_date'] }}')">
-                                                        <i class="fas fa-pen"></i>Ubah
-                                                    </button>   
-                                                </th>
-                                                @endif
+                                                <td>{{ $receipsDetail->schedule->court->name}}</td>
+                                                <td class="text-center">{{ DateFormat($receipsDetail->booking_date, "D MMMM Y")}}</td>
+                                                <td class="text-center">{{ $receipsDetail->schedule->operationalTime->name}}</td>
+                                                <td class="text-center">Rp. {{ NumberFormat($receipsDetail->price) }}</td>
                                             </tr>
+                                            <?php $total=$total+ $receipsDetail->price; ?>
                                             @endforeach
                                         </tbody>
                                         <tfoot>
@@ -94,9 +100,6 @@
                                             <tr>
                                                 <th class="text-center" colspan="3">Total</th>
                                                 <th class="text-center"><span>Rp. {{ NumberFormat($total) }}</span></th>
-                                                @if($receipt->status !== '2' )                                                
-                                                <th></th>
-                                                @endif
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -116,40 +119,3 @@
         </div>
     </div>
 </div>
-
-<div class="modal fade" id="update-modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Ubah Status</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form action="{{ URL::to('/admin/receipt-date-change') }}" method="POST" autocomplete="off">
-                    @csrf                 
-                    <input type="hidden" name="receipt_id" id="receipt_id"/>
-                    <input type="hidden" name="booking_date" id="booking_date"/>
-
-                    <div class="form-group">
-                        <label for="">Tanggal Baru</label>
-                        <input class="form-control" value="" name="new_date"  id="new_date" type="date"/> 
-                    </div>
-                    <button type="submit" onclick="return confirm('Anda yakin mengubah data ini?')" class="btn btn-primary">Simpan</button>
-                </form>
-            </div>
-        </div>
-        <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-</div>
-
-<script>
-    const AddReceiptId = (id, bookingDate) =>{
-        document.getElementById("receipt_id").value=id;
-        document.getElementById("booking_date").value=bookingDate;
-
-        document.getElementById("new_date").value=bookingDate;
-    }
-</script>

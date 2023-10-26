@@ -6,6 +6,8 @@ use App\Models\Receipt;
 use App\Models\Building;
 use App\Models\Schedule;
 use Illuminate\Http\Request;
+use App\Models\ReceiptDetail;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -14,12 +16,12 @@ class ReceiptController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
         $nowTime = \Carbon\Carbon::now();
-        $nowTimeString =DateFormat($nowTime, "Y-MM-DD");
+        $nowTimeString = DateFormat($nowTime, "Y-MM-DD");
         $endDate = Request()->input("endDate");
         $endDate = $endDate ? $endDate : $nowTimeString;
         $startDate = Request()->input("startDate");
@@ -32,7 +34,7 @@ class ReceiptController extends Controller
         [["created_at", "<=", $endDate . " 23:59:59"],["created_at", ">=", $startDate . " 00:00:00"],["status", "=", $status]]
         ;
 
-        $data =[
+        $data = [
             'title' => "Manajemen Data Nota",
             'receipts' => Receipt::where($whereQuery)->orderby("status", "asc")->orderby("created_at", "desc")->get(),
             'content' => "admin/receipt/index",
@@ -47,11 +49,11 @@ class ReceiptController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        $data =[
+        $data = [
             'title' => "Tambah Data Nota",
             'content' => "admin/receipt/add"
         ];
@@ -63,7 +65,7 @@ class ReceiptController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
@@ -97,18 +99,50 @@ class ReceiptController extends Controller
      * Display the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function show($id)
     {
         $receipt =  Receipt::find($id);
         $building_id = $receipt->receiptDetails[0]->schedule->court->building_id;
+        $total = 0;
+        $receiptDetailArray = array();
+        $i = 0;
+        foreach ($receipt->receiptDetails as $receiptDetail) {
+            $isFound = false;
 
-        $data =[
+            for ($j = 0; $j < count($receiptDetailArray); $j++) {
+                if($receiptDetail->schedule->court->name === $receiptDetailArray[$j]['court'] && DateFormat($receiptDetail->booking_date, "D MMMM Y") === $receiptDetailArray[$j]['date']) {
+                    $receiptDetailArray[$j]['schedule'] = $receiptDetailArray[$j]['schedule'] . ', ' . $receiptDetail->schedule->operationalTime->name;
+                    $receiptDetailArray[$j]['price'] = $receiptDetailArray[$j]['price'] + $receiptDetail->price;
+
+                    $isFound = true;
+                    break;
+                }
+            }
+
+            if(!$isFound) {
+                $receiptDetailArray[$i] = [
+                    'court' => $receiptDetail->schedule->court->name,
+                    'date' => DateFormat($receiptDetail->booking_date, "D MMMM Y"),
+                    'real_date' => $receiptDetail->booking_date,
+                    'schedule' => $receiptDetail->schedule->operationalTime->name,
+                    'price' => $receiptDetail->price
+                ];
+                $i++;
+            }
+
+            $total = $total + $receiptDetail->price;
+        }
+        $receiptDetailArray = collect($receiptDetailArray)->sortBy('real_date', null, false)->reverse()->toArray();
+
+        $data = [
             'title' => "Detail Data Nota",
             'content' => "admin/receipt/detail",
             'building' => Building::find($building_id),
-            'receipt' => $receipt
+            'receiptDetailArray' => collect($receiptDetailArray)->sortBy('court', null, true),
+            'receipt' => $receipt,
+            'total' => $total
         ];
 
         return view("admin.layouts.wrapper", $data);
@@ -118,11 +152,11 @@ class ReceiptController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        $data =[
+        $data = [
             'title' => "Ubah Data Nota",
             'receipt' => Receipt::find($id),
             'content' => "admin/receipt/add"
@@ -136,7 +170,7 @@ class ReceiptController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
@@ -152,10 +186,85 @@ class ReceiptController extends Controller
     }
 
     /**
+ * Update the specified resource in storage.
+ *
+ * @param  \Illuminate\Http\Request  $request
+ * @param  int  $id
+* @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
+ */
+
+    public function changeDate(Request $request)
+    {
+        $data = $request->validate([
+            'receipt_id' => 'required',
+            'booking_date' => 'required',
+            'new_date' => 'required',
+        ]);
+
+        $model = ReceiptDetail::with('receipt', 'schedule')->where([['receipt_id', $data['receipt_id']], ['booking_date', $data['booking_date']]]);
+        $details = $model->get();
+        $insertedData = array();
+        $i = 0;
+
+        $availableSchedule = true;
+
+        foreach ($details as $detail) {
+            $schedule = Schedule::where([['court_id', $detail->schedule->court_id], ['operational_time_id', $detail->schedule->operational_time_id], ['operational_day_id',\Carbon\Carbon::parse($data['new_date'])->dayOfWeek]])->first();
+            if ($schedule) {
+                $insertedData[$i] = [
+                    'receipt_id' => $data['receipt_id'],
+                    'schedule_id' => $schedule->id,
+                    'booking_date' =>  $data['new_date'],
+                    'price' => $schedule->price
+                ];
+
+                $i++;
+            } else {
+                $availableSchedule = false;
+                break;
+            }
+        }
+        if(!$availableSchedule) {
+            Alert::error('Error', 'Terdapat jadwal yang tidak dapat digeser karena tidak tersedia.');
+        } else {
+            $isFound = false;
+            foreach ($insertedData as $insertedSingle) {
+                $foundData = ReceiptDetail::where([['schedule_id', $insertedSingle['schedule_id']], ['booking_date', $data['booking_date']]])->first();
+
+                if ($foundData) {
+                    $isFound = true;
+                    break;
+                }
+            }
+
+            if(!$isFound) {
+                try {
+                    DB::beginTransaction();
+                    $model->delete();
+
+                    ReceiptDetail::insert($insertedData);
+                    Alert::success('Sukses', 'Data berhasil diupdate.');
+
+                    DB::commit();
+
+                } catch (\Throwable $th) {
+                    DB::rollback();
+                    Alert::error('Error', 'Terdapat gangguan saat menambah data..');
+                }
+            } else {
+                Alert::error('Error', 'Data pada tanggal digeser, sudah digunakan orang lain');
+            }
+        }
+
+        return redirect("/admin/receipt/" . $data['receipt_id']);
+    }
+
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function destroy($id)
     {

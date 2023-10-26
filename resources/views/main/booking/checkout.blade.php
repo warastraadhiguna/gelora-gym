@@ -127,7 +127,19 @@
                                                 </div>                   
                                             @enderror              
                                         </div>
-                                    </div>                                    
+                                    </div>        
+                                    
+                                    @if(auth()->user()->role !== 'user')
+                                    <div class="col-md-12 col-sm-12">
+                                        <div class="form-group card-label">
+                                            <label>Jenis</label>
+                                            <select class="form-control" name="status">
+                                                <option value="3">Blocking Jadwal</option>
+                                                <option value="0">Booking</option>                                              
+                                            </select>
+                                        </div>
+                                    </div>  
+                                    @endif
                                 </div>
                             </div>
                             <!-- /Personal Information -->

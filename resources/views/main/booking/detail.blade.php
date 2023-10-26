@@ -183,7 +183,8 @@ window.onload = function(){
     const errorMessage = '{{ $errorMessage }}';   
     const successMessage = '{{ $successMessage }}';
     const showModalOnLoad = '{{ $showModalOnLoad }}'; 
-
+    const totalPaidString = '{{ $totalPaidString }}';
+ 
     if(errorMessage){
         setTimeout(function() {
             showModal(errorMessage, 'error');
@@ -193,7 +194,7 @@ window.onload = function(){
         setTimeout(function() {
             // showModal(successMessage, 'success');
             showContinueProcess();
-            showContinueProcessButton();
+            showContinueProcessButton(totalPaidString);
         }, 50);        
     }      
     if(showModalOnLoad){
@@ -203,6 +204,10 @@ window.onload = function(){
     }
 
     const tempBookingDetailString = '{{ $tempBookingDetailString }}';
+
+    if(tempBookingDetailString)
+        showContinueProcessButton(totalPaidString);
+
     const tempBookingDetailArray = tempBookingDetailString.split(";");
     tempBookingDetailArray.forEach(tempBookingDetail => {
         if(tempBookingDetail){
@@ -214,6 +219,7 @@ window.onload = function(){
     });
 
     const bookedSchedulesString = '{{ $bookedSchedulesString }}';
+
     const bookedScheduleArray = bookedSchedulesString.split(";");
     bookedScheduleArray.forEach(bookedSchedules => {
         if(bookedSchedules){
@@ -261,10 +267,20 @@ function showContinueProcess()
     });  
 }
 
-function showContinueProcessButton()
+function showContinueProcessButton(totalPaidStringParameter)
 {
+    if(totalPaidStringParameter == "Rp. 0,-")
+    {
+        upper.style.visibility = "hidden";
+        lower.style.visibility = "hidden";      
+
+        return;
+    }
+
     upper.style.visibility = "visible";
+    upper.text = "Lanjutkan Permrosesan (" + totalPaidStringParameter + ")";
     lower.style.visibility = "visible";      
+    lower.text = "Lanjutkan Permrosesan (" + totalPaidStringParameter + ")";
 }
 
 function showTutorial()
@@ -298,7 +314,7 @@ function showInformation(showModalOnLoad) {
             });            
             $("#booking-filter-submit").click(function(){
                 const confirmation = confirm("Anda yakin menerapkan filter? Menerapkan filter akan menghapus data booking yang lama.");
-                console.log(confirmation);
+
                 if (confirmation){
                     $('form#booking-filter').submit();
                 }
@@ -324,7 +340,7 @@ function reserve (id, iteration)
             data: myFormData,
             success: function(data) {
                 linkElement.className = "timing selected";
-                showContinueProcessButton();                
+                showContinueProcessButton(data);                
             },
             error: function (e) {
                 alert(e.statusText);
@@ -342,6 +358,7 @@ function reserve (id, iteration)
             data: myFormData,
             success: function(data) {
                 linkElement.className = "timing";
+                showContinueProcessButton(data);    
             },
             error: function (e) {
                 alert(e.statusText);

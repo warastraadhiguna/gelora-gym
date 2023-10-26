@@ -28,7 +28,7 @@
                             <i class="fas fa-check"></i>
                             <h3>Pesanan berhasil dibayarkan!</h3>
                             <p>Pesanan tanggal {{ DateFormat($receipt->created_at, "D MMMM Y H:m:s") }} di<br><strong>{{ $building->name }}</strong><br><strong>{{ $building->address }}</strong></p>
-                            <a href="{{ URL::to('receipt' .'/' . $receipt->id)}}" class="btn btn-primary view-inv-btn">Lihat Detail</a>
+                            <a href="{{ URL::to('receipt' .'/' . $receipt->id)}}" class="btn btn-primary view-inv-btn">Lihat Nota</a>
                         </div>
                     </div>
                 </div>

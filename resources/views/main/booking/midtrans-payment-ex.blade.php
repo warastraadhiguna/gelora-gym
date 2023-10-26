@@ -1,4 +1,4 @@
-
+{{-- sebelum nota dipersingkat --}}
 <script type="text/javascript"
     src="{{ config('midtrans.snap_url') }}"
     data-client-key="{{ config('midtrans.client_key') }}"></script>
@@ -53,7 +53,13 @@
                                     <li>Waktu &nbsp; <span>{{ DateFormat($nowTime, " : D MMMM Y") }}</span></li>
                                 </ul>
                                 <ul class="booking-fee">
+                                    <?php 
+                                      $total = 0;  
+                                    ?>
                                     @foreach($receipt->receiptDetails as $key => $receiptDetail)
+                                    <?php 
+                                      $total = $total + $receiptDetail->price;
+                                    ?>
                                     <li>{{ "- " .$receiptDetail->schedule->court->name. '('. DateFormat($receiptDetail->booking_date, "D MMMM Y ") . $receiptDetail->schedule->operationalTime->name .')' }}  <span>Rp. {{ NumberFormat($receiptDetail->schedule->price) }}</span></li> 
                                     @endforeach
                                 </ul>

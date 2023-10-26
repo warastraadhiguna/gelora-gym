@@ -37,7 +37,7 @@
                             </div>                            
                             <div class="col-md-4">
                                 <p class="invoice-details">
-                                    {{ DateFormat($receipt->created_at, "D MMMM Y H:m:s") }}
+                                    {{ DateFormat($receipt->created_at, "D MMMM Y HH:mm:ss") }}
                                     <br/>
                                     @include('main.booking.status')
                                 </p>
@@ -75,23 +75,22 @@
                                     <table class="invoice-table table table-bordered">
                                         <thead>
                                             <tr>
-                                                <th>Lapangan</th>
-                                                <th class="text-center">Tanggal</th>
+                                                <th width="20%">Lapangan</th>
+                                                <th  width="25%" class="text-center">Tanggal</th>
                                                 <th class="text-center">Jadwal</th>
-                                                <th class="text-center">Harga</th>
+                                                <th  width="20%" class="text-center">Harga</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <?php $total=0; ?>
-                                            @foreach($receipt->receiptDetails as $receipsDetail)
+                                            @foreach($receiptDetailArray as $receipsDetail)
                                             <tr>
 
-                                                <td>{{ $receipsDetail->schedule->court->name}}</td>
-                                                <td class="text-center">{{ DateFormat($receipsDetail->booking_date, "D MMMM Y")}}</td>
-                                                <td class="text-center">{{ $receipsDetail->schedule->operationalTime->name}}</td>
-                                                <td class="text-center">Rp. {{ NumberFormat($receipsDetail->price) }}</td>
+                                                <td class="align-middle">{{ $receipsDetail['court']}}</td>
+                                                <td class="text-center align-middle">{{ $receipsDetail['date']}}</td>
+                                                <td class="text-center align-middle">{{ $receipsDetail['schedule']}}</td>
+                                                <td class="text-center align-middle">Rp. {{ NumberFormat($receipsDetail['price']) }}</td>
                                             </tr>
-                                            <?php $total=$total+ $receipsDetail->price; ?>
+
                                             @endforeach
                                         </tbody>
                                         <tfoot>

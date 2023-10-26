@@ -7,8 +7,6 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourtController;
-use App\Http\Controllers\PersonController;
-use App\Http\Controllers\RecordController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ReceiptController;
@@ -19,7 +17,6 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebBookingController;
 use App\Http\Controllers\WebBuildingController;
 use App\Http\Controllers\BlogCategoryController;
-use App\Http\Controllers\RecordHistoryController;
 use App\Http\Controllers\WeeklyBookingController;
 use App\Http\Controllers\LoginWithGoogleController;
 use App\Http\Controllers\QuestionController;
@@ -34,6 +31,7 @@ Route::get('/building/{id}', [WebBuildingController::class, "detail"]);
 Route::post('/search-building', [WebBuildingController::class, "searchBuilding"]);
 
 Route::get('/booking/{id}', [WebBookingController::class, "detail"])->middleware('auth');
+
 Route::post('/booking-filter', [WebBookingController::class, "filter"])->middleware('auth');
 
 Route::get('/checkout/{id}', [WebBookingController::class, "checkout"])->middleware('auth');
@@ -62,7 +60,7 @@ Route::get('authorized/google/callback', [LoginWithGoogleController::class, 'han
 Route::get('/', [HomeController::class, "index"]);
 Route::get('/logout', [AuthController::class, "logout"])->middleware('auth');
 
-Route::prefix('/admin')->middleware('auth', 'admin')->group(
+Route::prefix('/admin')->middleware(['auth', 'admin'])->group(
     function () {
         Route::get('/dashboard', [DashboardController::class, "index"]);
 
@@ -78,9 +76,6 @@ Route::prefix('/admin')->middleware('auth', 'admin')->group(
         Route::put('/social-media/{id}', [CompanyController::class, "updateSocialMedia"]);
         Route::put('/web/banner/{id}', [CompanyController::class, "updateBanner"]);
 
-        Route::resource('/person', PersonController::class);
-        Route::resource('/record', RecordController::class);
-        Route::get('/record-history', [RecordHistoryController::class, "index"]);
         Route::resource('/building/type', TypeController::class);
         Route::resource('/building', BuildingController::class);
         Route::resource('/court', CourtController::class);
@@ -88,6 +83,7 @@ Route::prefix('/admin')->middleware('auth', 'admin')->group(
         Route::get('/schedule/create', [ScheduleController::class, "create"]);
         Route::post('/schedule', [ScheduleController::class, "store"]);
         Route::resource('/receipt', ReceiptController::class);
+        Route::post('/receipt-date-change', [ReceiptController::class, "changeDate"]);
 
         Route::get('/weekly-booking', [WeeklyBookingController::class, "index"]);
         Route::get('/weekly-booking/create', [WeeklyBookingController::class, "create"]);

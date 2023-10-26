@@ -16,7 +16,6 @@ use App\Models\ReceiptDetail;
 use App\Models\OperationalTime;
 use App\Models\TempBookingDetail;
 use Illuminate\Support\Facades\DB;
-use App\Models\WeeklyBookingDetail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class WebBookingController extends Controller
@@ -42,6 +41,12 @@ class WebBookingController extends Controller
             TempBookingDetail::where([['user_id', auth()->user()->id]])->delete();
         }
 
+        //temp booking and receipts delete last 15 minute ago
+        $tenMinutesAgo = DateConvert(DateFormat(\Carbon\Carbon::now()->addMinutes(-10), "Y/M/D HH:mm:ss"));
+        TempBookingDetail::where([['created_at', '<=', $tenMinutesAgo]])->delete();
+        Receipt::where([['created_at', '<=', $tenMinutesAgo], ['status', '0'] ])->delete();
+
+
         $page = $page ? $page : 0;
         $repeatedDay = $repeatedDay ? $repeatedDay : 1;
         $repeatedPeriod = $repeatedPeriod ? $repeatedPeriod : 0;
@@ -50,7 +55,7 @@ class WebBookingController extends Controller
 
         $nowTime = \Carbon\Carbon::now();
         $nowDate = $nowTime;
-        $nowTime->addDay($page * 7);
+        $nowTime->addDays($page * 7);
         $nowTimes = array(); //time for every court, every court should has their our time
         foreach ($building->courts as $key => $court) {
             $nowTimes[$key] =  DateConvert(DateFormat($nowTime, "Y/M/D"));
@@ -59,28 +64,37 @@ class WebBookingController extends Controller
         if($filter == '1') {
             $errorMessage = $this->reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $id);
             if(!$errorMessage) {
-                $successMessage = "Data berhasil disimpan sesuai filter yang anda terapkan..";
+                $successMessage = "Data berhasil disimpan sesuai filter yang anda terapkan. ";
             }
         }
 
-        $bookingDetails = ReceiptDetail::where([['booking_date','>=',DateFormat($nowTime, "YYYY/MM/DD")]])->get();
+        //// search booked schedule from details side old school
+        // $bookingDetails = ReceiptDetail::with('receipt')->where([['booking_date','>=',DateFormat($nowTime, "YYYY/MM/DD")]])->get();
 
+        //// search booked schedule from details side new ways
+        $bookedDetails = ReceiptDetail::getBooked($nowTime);
         $bookedSchedulesString = "";
-        for ($i = 0; $i < count($bookingDetails); $i++) {
-            $bookingDetail = $bookingDetails[$i];
+        for ($i = 0; $i < count($bookedDetails); $i++) {
+            $bookingDetail = $bookedDetails[$i];
 
             $interval = date_create($nowTime->toDateString())->diff(date_create($bookingDetail->booking_date));
             $bookedSchedulesString = $bookedSchedulesString . 'link_' . $bookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
         }
-
+        // dd($bookedSchedulesString);
 
         $tempBookingDetails = TempBookingDetail::where([['user_id',auth()->user()->id]])->get();
+
         $tempBookingDetailString = "";
+        $totalPaid = 0;
+
         foreach ($tempBookingDetails as $key => $tempBookingDetail) {
             $interval = date_create($nowTime->toDateString())->diff(date_create($tempBookingDetail->booking_date));
             $tempBookingDetailString = $tempBookingDetailString . 'link_' . $tempBookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
+
+            $totalPaid = $totalPaid + $tempBookingDetail->schedule->price;
         }
 
+        $tempBookingDetails = TempBookingDetail::where([['user_id', auth()->user()->id],['booking_date', '>=',DateFormat($nowTime, "Y/M/D")]])->get();
 
 
         // $weeklyBookingDetails = Schedule::whereHas('weeklyBookingDetails')->orderby('id', 'asc')->get();
@@ -88,11 +102,11 @@ class WebBookingController extends Controller
         // foreach ($weeklyBookingDetails as $weeklyBookingDetail) {
         //     $bookedSchedulesString = $bookedSchedulesString . 'link_' . $weeklyBookingDetail->id . '_' . ($page*7 + $weeklyBookingDetail->operational_day_id - 1) . ";";
         // }
-        // dd($bookedSchedulesString);
-
+        // dd($bookedSchedulesString);,
+        $totalPaidString = "Rp. " . NumberFormat($totalPaid) . ",-";
         $html = view('main/booking/modal', array('building_id' => $building->id,'date' => $date,'start_time' => $start_time, 'end_time' => $end_time , 'court_quantity' => $court_quantity, 'repeatedDay' => $repeatedDay, 'repeatedPeriod' => $repeatedPeriod ))->render();
         $bookingHtml = view('main/booking/booking-tutorial-modal')->render();
-        $continueProcessHtml = view('main/booking/continue-process-modal', array('building_id' => $building->id))->render();
+        $continueProcessHtml = view('main/booking/continue-process-modal', array('building_id' => $building->id, 'totalPaidString' =>  $totalPaidString))->render();
 
         $data = [
             'content' => "main/booking/detail",
@@ -111,6 +125,8 @@ class WebBookingController extends Controller
             'html' =>  trim(preg_replace('/\s+/', ' ', $html)),
             'bookingHtml' =>  trim(preg_replace('/\s+/', ' ', $bookingHtml)),
             'continueProcessHtml' =>  trim(preg_replace('/\s+/', ' ', $continueProcessHtml)),
+            'totalPaidString' =>  $totalPaidString,
+            'code' => ''
         ];
 
         return view("main.layouts.wrapper", $data);
@@ -130,7 +146,7 @@ class WebBookingController extends Controller
         $iteration = $request->input("iteration");
 
         $nowTime = \Carbon\Carbon::now();
-        $nowTime->addDay($iteration);
+        $nowTime->addDays($iteration);
 
         $data = [
             'user_id' => auth()->user()->id,
@@ -138,7 +154,15 @@ class WebBookingController extends Controller
             'booking_date' => DateFormat($nowTime, "Y/M/D")
         ];
         TempBookingDetail::create($data);
-        echo "success";
+
+        $tempBookingDetails = TempBookingDetail::where([['user_id',auth()->user()->id]])->get();
+        $totalPaid = 0;
+
+        foreach ($tempBookingDetails as $tempBookingDetail) {
+            $totalPaid = $totalPaid + $tempBookingDetail->schedule->price;
+        }
+
+        echo "Rp. " . NumberFormat($totalPaid) . ",-";
     }
 
     public function deleteReserve(Request $request)
@@ -147,12 +171,21 @@ class WebBookingController extends Controller
         $iteration = $request->input("iteration");
 
         $nowTime = \Carbon\Carbon::now();
-        $nowTime->addDay($iteration);
+        $nowTime->addDays($iteration);
 
         $tempBookingDetail = TempBookingDetail::where([['user_id', auth()->user()->id],['schedule_id', $schedule_id],['booking_date',DateFormat($nowTime, "Y/M/D")]])->first();
 
         $tempBookingDetail->delete();
-        echo "success";
+
+        $tempBookingDetails = TempBookingDetail::where([['user_id',auth()->user()->id]])->get();
+        $totalPaid = 0;
+
+        foreach ($tempBookingDetails as $tempBookingDetail) {
+            $totalPaid = $totalPaid + $tempBookingDetail->schedule->price;
+        }
+
+        echo "Rp. " . NumberFormat($totalPaid) . ",-";
+
     }
 
     public function checkout($id)
@@ -194,6 +227,7 @@ class WebBookingController extends Controller
             'email' => 'sometimes|email:rfc,dns',
             'phone' => 'required|numeric',
             'note' => 'sometimes',
+            'status' => 'sometimes',
             'building_id' => 'sometimes',
         ]);
         $buildingId = $data['building_id'];
@@ -251,7 +285,13 @@ class WebBookingController extends Controller
 
             DB::commit();
 
-            return redirect("midtrans-payment" . "/" . $newReceipt->id);
+            //3 for blocking data
+            if($data['status'] === "3") {
+                return redirect("admin/receipt");
+
+            } else {
+                return redirect("midtrans-payment" . "/" . $newReceipt->id);
+            }
         } catch (Exception $e) {
             DB::rollback();
             Alert::error('Error', $e->getMessage());
@@ -277,6 +317,10 @@ class WebBookingController extends Controller
                 return redirect("/");
             }
 
+            $receipt = Receipt::find($id);
+            $data['user_id'] = auth()->user()->id;
+            $receipt->update($data);
+
             $total = 0;
             foreach ($receipt->receiptDetails as $receiptDetail) {
                 $total = $total + $receiptDetail->price;
@@ -296,12 +340,14 @@ class WebBookingController extends Controller
             );
 
             $snapToken = Snap::getSnapToken($params);
+
             $data = [
                 'content' => "main/booking/midtrans-payment",
                 'receipt' => $receipt,
                 'snapToken' => $snapToken,
                 'building' => $receipt->receiptDetails[0]->schedule->court->building,
-                'nowTime' => \Carbon\Carbon::now()
+                'nowTime' => \Carbon\Carbon::now(),
+                'total' => $total,
             ];
 
             return view("main.layouts.wrapper", $data);
@@ -357,17 +403,49 @@ class WebBookingController extends Controller
             return redirect("/");
         }
 
+
+        $total = 0;
+        $receiptDetailArray = array();
+        $i = 0;
+        foreach ($receipt->receiptDetails as $receiptDetail) {
+            $isFound = false;
+
+            for ($j = 0; $j < count($receiptDetailArray); $j++) {
+                if($receiptDetail->schedule->court->name === $receiptDetailArray[$j]['court'] && DateFormat($receiptDetail->booking_date, "D MMMM Y") === $receiptDetailArray[$j]['date']) {
+                    $receiptDetailArray[$j]['schedule'] = $receiptDetailArray[$j]['schedule'] . ', ' . $receiptDetail->schedule->operationalTime->name;
+                    $receiptDetailArray[$j]['price'] = $receiptDetailArray[$j]['price'] + $receiptDetail->price;
+
+                    $isFound = true;
+                    break;
+                }
+            }
+
+            if(!$isFound) {
+                $receiptDetailArray[$i] = [
+                    'court' => $receiptDetail->schedule->court->name,
+                    'date' => DateFormat($receiptDetail->booking_date, "D MMMM Y"),
+                    'real_date' => $receiptDetail->booking_date,
+                    'schedule' => $receiptDetail->schedule->operationalTime->name,
+                    'price' => $receiptDetail->price
+                ];
+                $i++;
+            }
+
+            $total = $total + $receiptDetail->price;
+        }
+        $receiptDetailArray = collect($receiptDetailArray)->sortBy('real_date', null, false)->reverse()->toArray();
         $building_id = $receipt->receiptDetails[0]->schedule->court->building_id;
 
         $data = [
             'content' => "main/booking/receipt",
             'building' => Building::find($building_id),
             'receipt' => $receipt,
+            'receiptDetailArray' => collect($receiptDetailArray)->sortBy('court', null, true)->reverse()->toArray(),
+            'total' => $total,
         ];
 
         return view("main.layouts.wrapper", $data);
     }
-
     private function reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $building_id)
     {
         $date = $filters[1];
@@ -408,7 +486,7 @@ class WebBookingController extends Controller
                 for ($i = 0; $i <= $repeatedPeriod; $i++) {
                     $repeatedFormula = $repeatedDayValue == 0 ? $i : $repeatedDayValue * $i;
 
-                    $choosenDate = DateConvert($dateStringDefault)->addDay($repeatedFormula);
+                    $choosenDate = DateConvert($dateStringDefault)->addDays($repeatedFormula);
 
                     $schedules = Schedule::where([["is_active", "1"], ["operational_day_id", $choosenDate->dayOfWeek], ["court_id", $court->id]])->whereIn('operational_time_id', $operationalTimeArray)->get();
 

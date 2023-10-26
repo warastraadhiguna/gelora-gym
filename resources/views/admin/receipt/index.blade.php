@@ -160,7 +160,7 @@
                                 ?></label>
                         </div>
                         <div class="form-group">
-                            <label>{{ $receipt->status === '0'? "Belum Bayar" : ($receipt->status === '1'? "Bayar" : "Selesai") }}</label>
+                            <label>{{ $receipt->status === '0'? "Belum Bayar" : ($receipt->status === '1'? "Bayar" : ($receipt->status === '2'? "Selesai" : "Block")) }}</label>
                         </div>
                     </div>
                 </div>
@@ -172,6 +172,11 @@
                     <i class="fas fa-pen"></i> Status
                 </button>                                    
                 @endif
+                @if($receipt->status === "3" )
+                <button type="button" class="btn btn-primary btn-sm my-2"  onclick="copyLink('{{ URL::to('/midtrans-payment/' . $receipt->id)  }}')">
+                    <i class="fas fa-link"></i> Link
+                </button>                                    
+                @endif                
                 <a target="_blank" href="{{ URL::to('/admin/receipt/' . $receipt->id) }}" class="btn btn-success btn-sm"> <i class="fas fa-eye"></i> Lihat</a>                  
                 @if(auth()->user()->role === "superadmin")
                 <form action="{{ URL::to('/admin/receipt/' . $receipt->id) }}" method="POST">
@@ -276,7 +281,9 @@
                                 <option value="1" {{ $status === '1' ? "selected" : "" }}>Bayar 
                                 </option>
                                 <option value="2" {{ $status === '2' ? "selected" : "" }}>Selesai 
-                                </option>                            
+                                </option>           
+                                <option value="3" {{ $status === '3' ? "selected" : "" }}>Block 
+                                </option>                    
                             </select>                            
                         </div>                                        
                     </div>
@@ -358,4 +365,13 @@
 
     window.open(window.location.pathname + '?startDate=' + startDateFilter + '&endDate=' + endDateFilter + '&status=' + statusFilter, '_self');
   }    
+
+  function copyLink(data)
+  {
+        // Copy the text inside the text field
+    navigator.clipboard.writeText(data);
+    
+    // Alert the copied text
+    alert("Data sudah disimpan di clipboard :" + data);
+  }
 </script>
