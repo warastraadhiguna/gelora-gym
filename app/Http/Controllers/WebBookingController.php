@@ -206,7 +206,6 @@ class WebBookingController extends Controller
             'tempBookingDetails' => $tempBookingDetails,
             'total' => $total,
         ];
-
         return view("main.layouts.wrapper", $data);
     }
 
@@ -286,7 +285,7 @@ class WebBookingController extends Controller
             DB::commit();
 
             //3 for blocking data
-            if($data['status'] === "3") {
+            if($data['status'] && $data['status'] === "3") {
                 return redirect("admin/receipt");
 
             } else {
