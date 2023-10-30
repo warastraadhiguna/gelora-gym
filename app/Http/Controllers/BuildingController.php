@@ -16,22 +16,13 @@ class BuildingController extends Controller
      */
     public function index()
     {
+        $data = [
+            'title' => "Manajemen Data Gedung",
+            'buildings' => Building::get(),
+            'content' => "admin/building/index"
+        ];
 
-        try {
-
-            $data = [
-                'title' => "Manajemen Data Gedung",
-                'buildings' => Building::get(),
-                'content' => "admin/building/index"
-            ];
-
-            return view("admin.layouts.wrapper", $data);
-
-        } catch(\Throwable $e) {
-            Alert::error('Error', $e->getMessage());
-        }
-
-
+        return view("admin.layouts.wrapper", $data);
     }
 
     /**
@@ -106,13 +97,20 @@ class BuildingController extends Controller
      */
     public function edit($id)
     {
-        $data = [
-            'title' => "Ubah Data Gedung",
-            'building' => Building::find($id),
-            'content' => "admin/building/add"
-        ];
 
-        return view("admin.layouts.wrapper", $data);
+        try {
+
+
+            $data = [
+                'title' => "Ubah Data Gedung",
+                'building' => Building::find($id),
+                'content' => "admin/building/add"
+            ];
+
+            return view("admin.layouts.wrapper", $data);
+        } catch(\Throwable $e) {
+            Alert::error('Error', $e->getMessage());
+        }
     }
 
     /**
