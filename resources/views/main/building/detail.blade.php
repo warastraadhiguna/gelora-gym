@@ -181,6 +181,7 @@
 
                                             @foreach(explode(';',$building->operational_times) as $operational_time)
                                             <?php  $time = explode('~',$operational_time)?>
+                                            @if(sizeof($time) > 1)
                                             <div class="listing-day">
                                                 <div class="day">{{ $time[0]  }}</div>
                                                 <div class="time-items">
@@ -192,6 +193,7 @@
                                                     </span>
                                                 </div>
                                             </div>
+                                            @endif
                                             @endforeach                                            
 
                                         </div>

@@ -81,30 +81,24 @@ class WebBuildingController extends Controller
 
     public function detail($id)
     {
-        try {
+        $filter = GetScheduleFilter();
+        $type_id = $filter[0];
+        $date = $filter[1];
+        $start_time = $filter[2];
+        $end_time = $filter[3];
+        $court_quantity = $filter[4];
 
+        $data = [
+            'content' => "main/building/detail",
+            'building' => Building::find($id),
+            'type_id' => $type_id,
+            'date' => $date,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'court_quantity' => $court_quantity
+        ];
 
-            $filter = GetScheduleFilter();
-            $type_id = $filter[0];
-            $date = $filter[1];
-            $start_time = $filter[2];
-            $end_time = $filter[3];
-            $court_quantity = $filter[4];
-
-            $data = [
-                'content' => "main/building/detail",
-                'building' => Building::find($id),
-                'type_id' => $type_id,
-                'date' => $date,
-                'start_time' => $start_time,
-                'end_time' => $end_time,
-                'court_quantity' => $court_quantity
-            ];
-
-            return view("main.layouts.wrapper", $data);
-        } catch(\Throwable $e) {
-            dd($e->getMessage());
-        }
+        return view("main.layouts.wrapper", $data);
     }
 
     public function searchBuilding()
