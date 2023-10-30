@@ -12,27 +12,36 @@ class BuildingController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $data =[
-            'title' => "Manajemen Data Gedung",
-            'buildings' => Building::get(),
-            'content' => "admin/building/index"
-        ];
 
-        return view("admin.layouts.wrapper", $data);
+        try {
+
+            $data = [
+                'title' => "Manajemen Data Gedung",
+                'buildings' => Building::get(),
+                'content' => "admin/building/index"
+            ];
+
+            return view("admin.layouts.wrapper", $data);
+
+        } catch(\Throwable $e) {
+            Alert::error('Error', $e->getMessage());
+        }
+
+
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function create()
     {
-        $data =[
+        $data = [
             'title' => "Tambah Data Gedung",
             'content' => "admin/building/add"
         ];
@@ -44,7 +53,7 @@ class BuildingController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
@@ -78,26 +87,26 @@ class BuildingController extends Controller
         return redirect("/admin/building");
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+    // /**
+    //  * Display the specified resource.
+    //  *
+    //  * @param  int  $id
+    //  * @return \Illuminate\Http\Response
+    //  */
+    // public function show($id)
+    // {
+    //     //
+    // }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        $data =[
+        $data = [
             'title' => "Ubah Data Gedung",
             'building' => Building::find($id),
             'content' => "admin/building/add"
@@ -111,7 +120,7 @@ class BuildingController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
@@ -153,7 +162,7 @@ class BuildingController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {
