@@ -50,7 +50,7 @@ class WebBuildingController extends Controller
         :
         Building::where("is_active", "1")->get();
 
-        $i =0;
+        $i = 0;
         foreach ($buildings as $key => $building) {
             if($building->is_bookable == "1" && count($building->courts) < $court_quantity) {
                 $bookedBuildingArray[$i] = $building->id;
@@ -66,7 +66,7 @@ class WebBuildingController extends Controller
             }
         }
 
-        $data =[
+        $data = [
             'content' => "main/building/index",
             'buildings' => $buildings->whereNotIn('id', $bookedBuildingArray),
             'type_id' => $type_id,
@@ -81,24 +81,30 @@ class WebBuildingController extends Controller
 
     public function detail($id)
     {
-        $filter = GetScheduleFilter();
-        $type_id = $filter[0];
-        $date = $filter[1];
-        $start_time = $filter[2];
-        $end_time = $filter[3];
-        $court_quantity = $filter[4];
+        try {
 
-        $data =[
-            'content' => "main/building/detail",
-            'building' => Building::find($id),
-            'type_id' => $type_id,
-            'date' => $date,
-            'start_time' => $start_time,
-            'end_time' => $end_time,
-            'court_quantity' => $court_quantity
-        ];
 
-        return view("main.layouts.wrapper", $data);
+            $filter = GetScheduleFilter();
+            $type_id = $filter[0];
+            $date = $filter[1];
+            $start_time = $filter[2];
+            $end_time = $filter[3];
+            $court_quantity = $filter[4];
+
+            $data = [
+                'content' => "main/building/detail",
+                'building' => Building::find($id),
+                'type_id' => $type_id,
+                'date' => $date,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'court_quantity' => $court_quantity
+            ];
+
+            return view("main.layouts.wrapper", $data);
+        } catch(\Throwable $e) {
+            dd($e->getMessage());
+        }
     }
 
     public function searchBuilding()
@@ -109,7 +115,7 @@ class WebBuildingController extends Controller
         $endTime = isset($post['end_time']) && $post['end_time'] ? $post['end_time'] : "";
         $courtQuantity = isset($post['court_quantity']) && $post['court_quantity'] ? $post['court_quantity'] : "";
 
-        $defaultUrl = "/building?type_id=" . $post['type_id'] . "&date=" . $date . "&start_time=".   $startTime . "&end_time=" . $endTime. "&court_quantity=" . $courtQuantity;
+        $defaultUrl = "/building?type_id=" . $post['type_id'] . "&date=" . $date . "&start_time=" . $startTime . "&end_time=" . $endTime . "&court_quantity=" . $courtQuantity;
 
         if(isset($post['building_id'])) {
             $building = Building::find($post['building_id']);
@@ -117,7 +123,7 @@ class WebBuildingController extends Controller
                 return redirect($defaultUrl);
             }
 
-            return redirect("/booking/". $post['building_id'] ."?type_id=" . $post['type_id'] . "&date=" . $date . "&start_time=". $startTime . "&end_time=" . $endTime. "&court_quantity=" . $courtQuantity);
+            return redirect("/booking/" . $post['building_id'] . "?type_id=" . $post['type_id'] . "&date=" . $date . "&start_time=" . $startTime . "&end_time=" . $endTime . "&court_quantity=" . $courtQuantity);
         }
 
         return redirect($defaultUrl);

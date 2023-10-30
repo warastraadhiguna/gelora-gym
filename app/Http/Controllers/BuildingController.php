@@ -97,9 +97,6 @@ class BuildingController extends Controller
      */
     public function edit($id)
     {
-        dd("hjalo");
-
-
         $data = [
             'title' => "Ubah Data Gedung",
             'building' => Building::find($id),
@@ -107,7 +104,6 @@ class BuildingController extends Controller
         ];
 
         return view("admin.layouts.wrapper", $data);
-
     }
 
     /**
