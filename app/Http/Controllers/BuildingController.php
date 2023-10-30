@@ -97,20 +97,17 @@ class BuildingController extends Controller
      */
     public function edit($id)
     {
+        dd("hjalo");
 
-        try {
 
+        $data = [
+            'title' => "Ubah Data Gedung",
+            'building' => Building::find($id),
+            'content' => "admin/building/add"
+        ];
 
-            $data = [
-                'title' => "Ubah Data Gedung",
-                'building' => Building::find($id),
-                'content' => "admin/building/add"
-            ];
+        return view("admin.layouts.wrapper", $data);
 
-            return view("admin.layouts.wrapper", $data);
-        } catch(\Throwable $e) {
-            Alert::error('Error', $e->getMessage());
-        }
     }
 
     /**
