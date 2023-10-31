@@ -11,7 +11,7 @@ class CompanyController extends Controller
 {
     public function index()
     {
-        $data =[
+        $data = [
             'title' => "Data Perusahaan",
             'content' => "admin/company/index"
         ];
@@ -26,7 +26,7 @@ class CompanyController extends Controller
             'name' => 'required',
             'address' => 'required',
             'city' => 'required',
-            'email' => 'nullable',
+            'email' => 'sometimes',
             'phone' => 'required',
             'note' => 'required',
             'tagline' => 'required',
@@ -34,6 +34,7 @@ class CompanyController extends Controller
             'icon_url' => 'sometimes|mimes:jpg,png,jpeg,ico|max:1024',
         ]);
         $data['user_id'] = auth()->user()->id;
+        $data['email'] =  $data['email'] ? $data['email'] : "";
 
         if($request->hasFile('logo_url')) {
             if($company->logo_url != null) {
@@ -63,7 +64,7 @@ class CompanyController extends Controller
 
     public function socialMedia()
     {
-        $data =[
+        $data = [
             'title' => "Data Sosial Media",
             'content' => "admin/company/social-media"
         ];
@@ -90,7 +91,7 @@ class CompanyController extends Controller
 
     public function banner()
     {
-        $data =[
+        $data = [
             'title' => "Data banner",
             'content' => "admin/web/banner"
         ];
