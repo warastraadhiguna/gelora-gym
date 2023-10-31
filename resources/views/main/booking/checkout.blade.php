@@ -54,7 +54,17 @@
                                 </ul>
                                 <ul class="booking-fee">
                                     @foreach($tempBookingDetails as $tempBookingDetail)
-                                    <li><a onclick="deleteBooking({{ $tempBookingDetail->id }})" href="#" style="text-decoration:underline; color: red">hapus</a>{{ " " .$tempBookingDetail->schedule->court->name. '('. DateFormat($tempBookingDetail->booking_date, "D MMMM Y ") . $tempBookingDetail->schedule->operationalTime->name .')' }}  <span>Rp. {{ NumberFormat($tempBookingDetail->schedule->price) }}</span></li> 
+                                    @if($tempBookingDetail->is_booked === 1)
+                                    <li style="text-decoration:line-through">
+                                    @else
+                                    <li>
+                                    @endif
+                                        <a onclick="deleteBooking({{ $tempBookingDetail->id }})" href="#" style="text-decoration:underline; color: red">hapus</a>
+                                        {{ " " .$tempBookingDetail->schedule->court->name. '('. DateFormat($tempBookingDetail->booking_date, "D MMMM Y ") . $tempBookingDetail->schedule->operationalTime->name .')' }}  
+                                        
+                                        
+                                        <span>Rp. {{ NumberFormat($tempBookingDetail->schedule->price) }}</span>
+                                    </li> 
                                     @endforeach
                                 </ul>
                                 <div class="booking-total">

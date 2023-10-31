@@ -28,9 +28,9 @@
     <thead>
         <tr>
             <th width="5%">No</th>
-            <th width="45%">Penyewa</th>
-            <th width="40%">Detail</th>
-            <th width="20%">Action</th>
+            <th width="35%">Penyewa</th>
+            <th>Detail</th>
+            <th width="10%">Action</th>
         </tr>
     </thead>
     <tbody>

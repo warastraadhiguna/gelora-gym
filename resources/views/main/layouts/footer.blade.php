@@ -41,9 +41,11 @@
                                     <div class="footer-address">
                                         <p><i class="feather-phone-call"></i> {{ $company->phone }}</p>
                                     </div>
+                                    @if($company->email)                                        
                                     <div class="footer-address mb-0">
                                         <p><i class="feather-mail"></i> {{ $company->email }}</p>
                                     </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -52,15 +54,21 @@
                                 <h2 class="footer-title">Lebih Dekat</h2>
                                 <div class="social-icon">
                                     <ul>
+                                        @if($company->facebook )
                                         <li>
                                             <a href="{{ $company->facebook  }}" target="_blank"><i class="fab fa-facebook"></i> </a>
                                         </li>
+                                        @endif
+                                        @if($company->instagram )
                                         <li>
                                             <a href="{{ $company->instagram  }}" target="_blank"><i class="fab fa-instagram"></i></a>
                                         </li>
+                                        @endif
+                                        @if($company->youtube)
                                         <li>
                                             <a href="{{ $company->youtube  }}" target="_blank"><i class="fab fa-youtube"></i> </a>
                                         </li>
+                                        @endif
                                     </ul>
                                 </div>
                             </div>

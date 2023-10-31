@@ -15085,13 +15085,13 @@ html.menu-opened body {
     transition: 0.7s;
 }
 
-.time-slot.time-slot-blk li .timing:hover {
+/* .time-slot.time-slot-blk li .timing:hover {
     background: #ffffff;
     box-shadow: inset 0 0 0 50px #ffffff;
     -webkit-transition: 0.7s;
     -ms-transition: 0.7s;
     transition: 0.7s;
-}
+} */
 
 .time-slot.time-slot-blk li .timing.active {
     background: #fd0e0edb;
@@ -38903,13 +38903,15 @@ input:checked+.tog-slider:before {
     transition: 0.7s;
 }
 
-.time-slot li .timing:hover {
+/* edited by angling */
+
+/* .time-slot li .timing:hover {
     background: #ffffff;
     box-shadow: inset 0 0 0 50px #ffffff;
     -webkit-transition: 0.7s;
     -ms-transition: 0.7s;
     transition: 0.7s;
-}
+} */
 
 .time-slot li .timing.active {
     background: #000000;

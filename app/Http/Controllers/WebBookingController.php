@@ -263,7 +263,7 @@ class WebBookingController extends Controller
                 $tempBookingDetailExist = ReceiptDetail::where([['schedule_id', $tempBookingDetail->schedule_id],['booking_date', '=',DateFormat($tempBookingDetail->booking_date, "Y/M/D")]])->first();
 
                 if($tempBookingDetailExist) {
-                    $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; ";
+                    $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; \n\r";
                 }
 
                 // $weeklyBookingDetailExist = WeeklyBookingDetail::where([['schedule_id', $tempBookingDetail->schedule_id]])->first();
@@ -275,7 +275,9 @@ class WebBookingController extends Controller
 
             if($errorMessage) {
                 DB::rollback();
-                Alert::error('Error', "Terdapat jadwal yang sudah dibooking diwaktu yang sama!! Antara lain : " . $errorMessage);
+                Alert::error('Error', "Terdapat jadwal yang sudah dibooking diwaktu yang sama!! Silahkan hapus jadwal yang dicoret!!");
+                $tempBookingDetails->update(['is_booked' => '1']);
+
                 return redirect("checkout/" . $buildingId);
             }
 
@@ -452,7 +454,7 @@ class WebBookingController extends Controller
         $end_time = $filters[3];
         $court_quantity = $filters[4];
         $repeatedDayValue = $repeatedDay == "1" ? 0 : $repeatedDay;
-
+        // dd($repeatedDay);
         if($start_time && $end_time && $date) {
             $nowTime = \Carbon\Carbon::now();
             $nowTimeString = DateFormat($nowTime, "YYYY/MM/DD HH:mm");
@@ -483,11 +485,14 @@ class WebBookingController extends Controller
                 $tempBookingPerScheduleArray = array();
                 $tempBookingPerScheduleIndex = 0;
                 for ($i = 0; $i <= $repeatedPeriod; $i++) {
+                    //if repeated day value = 0 = a day, follow $i else (weekly/mouthly) * i
                     $repeatedFormula = $repeatedDayValue == 0 ? $i : $repeatedDayValue * $i;
-
                     $choosenDate = DateConvert($dateStringDefault)->addDays($repeatedFormula);
 
-                    $schedules = Schedule::where([["is_active", "1"], ["operational_day_id", $choosenDate->dayOfWeek], ["court_id", $court->id]])->whereIn('operational_time_id', $operationalTimeArray)->get();
+                    //angling set sunday to be 7 in database, but in the real day should be 0
+                    $operationalDayNumber = $choosenDate->dayOfWeek === 0 ? 7 : $choosenDate->dayOfWeek;
+
+                    $schedules = Schedule::where([["is_active", "1"], ["operational_day_id", $operationalDayNumber], ["court_id", $court->id]])->whereIn('operational_time_id', $operationalTimeArray)->get();
 
                     $dateString = $choosenDate->isoFormat('YYYY/MM/DD');
 
@@ -528,6 +533,10 @@ class WebBookingController extends Controller
                     $tempBookingDetails[$tempBookingDetailIndex] = $tempBookingPerSchedule;
                     $tempBookingDetailIndex++;
                 }
+            }
+
+            if(($court_quantity * count($operationalTimes) * ($repeatedPeriod + 1)) != count($tempBookingDetails)) {
+                return "Terdapat jadwal yang tidak tersedia!!";
             }
 
             TempBookingDetail::insert($tempBookingDetails);
