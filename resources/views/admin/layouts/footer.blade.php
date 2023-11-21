@@ -43,8 +43,8 @@
 <script>
   $(function () {
     // Summernote
+    $('.summernote').summernote()
     $('#summernote').summernote()
-
   })
 
     $("input[data-bootstrap-switch]").each(function(){

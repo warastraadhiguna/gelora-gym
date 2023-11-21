@@ -17,6 +17,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebBookingController;
 use App\Http\Controllers\WebBuildingController;
 use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\WeeklyBookingController;
 use App\Http\Controllers\LoginWithGoogleController;
 use App\Http\Controllers\QuestionController;
@@ -29,6 +30,10 @@ Route::post('/blog', [HomeController::class, "searchBlog"]);
 Route::get('/building', [WebBuildingController::class, "index"]);
 Route::get('/building/{id}', [WebBuildingController::class, "detail"]);
 Route::post('/search-building', [WebBuildingController::class, "searchBuilding"]);
+
+Route::get('/privacy-policy', [HomeController::class, "showPrivacyPolicy"]);
+Route::get('/return-refund-policy', [HomeController::class, "showReturnRefundPolicy"]);
+Route::get('/terms-conditions', [HomeController::class, "showTermsConditions"]);
 
 Route::get('/booking/{id}', [WebBookingController::class, "detail"])->middleware('auth');
 
@@ -93,5 +98,10 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(
         Route::delete('/weekly-booking/{id}', [WeeklyBookingController::class, "destroy"]);
 
         Route::resource('/user', UserController::class)->middleware('checkRole:superadmin,admin');
+
+
+        Route::get('/legal', [LegalController::class, "showLegal"]);
+        Route::put('/legal', [LegalController::class, "update"]);
+
     }
 );

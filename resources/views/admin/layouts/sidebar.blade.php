@@ -44,7 +44,7 @@
               </li>
             </ul>
           </li>   
-          <li class="nav-item  {{ Request::is('admin/web*')? 'menu-is-opening menu-open' : '' }}">
+          <li class="nav-item  {{ Request::is('admin/web*') || Request::is('admin/legal*')? 'menu-is-opening menu-open' : '' }}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-globe"></i>
               <p>
@@ -91,8 +91,16 @@
                   <p>Pertanyaan Umum</p>
                 </a>
               </li>
-            </ul>                                   
-          </li>           
+            </ul>      
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ URL::to('/admin/legal') }}" class="nav-link {{ Request::is('admin/legal')? 'active' : '' }}">
+                  <i class="far fa-circle nav-icon ml-3"></i>
+                  <p>Legal</p>
+                </a>
+              </li>
+            </ul>                                          
+          </li>                      
           <li class="nav-item  {{ Request::is('admin/building*') || Request::is('admin/court*') || Request::is('admin/schedule*') || Request::is('admin/weekly-booking*')? 'menu-is-opening menu-open' : '' }}">
             <a href="#" class="nav-link">
               <i class="nav-icon fas fa-building"></i>

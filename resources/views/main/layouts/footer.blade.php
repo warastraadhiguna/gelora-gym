@@ -15,9 +15,11 @@
                         </div>
                         <div class="col-lg-2 col-md-4">
                             <div class="footer-widget footer-menu">
-                                <h2 class="footer-title">Gedung Olahraga</h2>
+                                <h2 class="footer-title">Legal</h2>
                                 <ul>
-                                    <li><a href="{{ URL::to('/building') }}">Pilih Olahraga</a></li>
+                                    <li><a href="{{ URL::to('/privacy-policy') }}">Privacy Policy</a></li>
+                                    <li><a href="{{ URL::to('/return-refund-policy') }}">Return & Refund Policy</a></li>
+                                    <li><a href="{{ URL::to('/terms-conditions') }}">Terms & Conditions</a></li>
                                 </ul>
                             </div>
                         </div>

@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Blog;
 use Illuminate\Http\Request;
-use App\Models\BlogCategory;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -13,11 +12,11 @@ class BlogController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $data =[
+        $data = [
             'title' => "Manajemen Blog",
             'blogs' => Blog::get(),
             'content' => "admin/blog/index"
@@ -29,11 +28,11 @@ class BlogController extends Controller
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return mixed
      */
     public function create()
     {
-        $data =[
+        $data = [
             'title' => "Tambah Blog",
             'content' => "admin/blog/add"
         ];
@@ -45,7 +44,7 @@ class BlogController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function store(Request $request)
     {
@@ -73,25 +72,14 @@ class BlogController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function edit($id)
     {
-        $data =[
+        $data = [
             'title' => "Ubah Blog",
             'blog' => Blog::find($id),
             'content' => "admin/blog/add"
@@ -105,7 +93,7 @@ class BlogController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function update(Request $request, $id)
     {
@@ -141,7 +129,7 @@ class BlogController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+    * @return \Illuminate\Http\RedirectResponse/Illuminate\Routing\Redirector
      */
     public function destroy($id)
     {

@@ -3,17 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Blog;
+use App\Models\Legal;
 use App\Models\Benefit;
 use App\Models\Building;
-use App\Models\BlogCategory;
 use App\Models\Question;
+use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $data =[
+        $data = [
             'content' => "main/home/index",
             'buildings' => Building::where("is_active", "1")->get(),
             'benefits' => Benefit::get(),
@@ -36,27 +37,27 @@ class HomeController extends Controller
 
         $blogs = $category > 0 ?
         Blog::where("is_published", "1")->where([
-            ["title", 'like', '%' . $search .'%'  ],
+            ["title", 'like', '%' . $search . '%'  ],
             ["blog_category_id", '=', $category  ]
         ])
         :
-        Blog::where("is_published", "1")->where([["title", 'like', '%' . $search .'%'  ]]);
+        Blog::where("is_published", "1")->where([["title", 'like', '%' . $search . '%'  ]]);
 
-        $totalPage = count($blogs->get()) == 0 ? 0 : ceil(count($blogs->get())/$shownBlogPerPage);
+        $totalPage = count($blogs->get()) == 0 ? 0 : ceil(count($blogs->get()) / $shownBlogPerPage);
 
         $shownBlogList = count($blogs->get()) == 0 ? null :
         $blogs->orderBy("created_at", "DESC")->offset($shownBlogPerPage * ($page - 1))->limit($shownBlogPerPage)->get();
 
         $choosenCategory =  $category == 0 ? null : BlogCategory::find($category);
 
-        $data =[
+        $data = [
             'content' => "main/blog/index",
             'blogs' => $shownBlogList ,
             'totalPage' => $totalPage,
             'page' => $page,
             'search' => $search,
             'category' => $category,
-            'choosenCategory'=> $choosenCategory ,
+            'choosenCategory' => $choosenCategory ,
         ];
 
         return view("main.layouts.wrapper", $data);
@@ -74,9 +75,39 @@ class HomeController extends Controller
 
     public function detailBlog($id)
     {
-        $data =[
+        $data = [
             'content' => "main/blog/detail",
             'blog' => Blog::find($id),
+        ];
+
+        return view("main.layouts.wrapper", $data);
+    }
+
+    public function showPrivacyPolicy()
+    {
+        $data = [
+            'content' => "main/home/privacy-policy",
+            'legal' => Legal::first(),
+        ];
+
+        return view("main.layouts.wrapper", $data);
+    }
+
+    public function showReturnRefundPolicy()
+    {
+        $data = [
+            'content' => "main/home/return-refund-policy",
+            'legal' => Legal::first(),
+        ];
+
+        return view("main.layouts.wrapper", $data);
+    }
+
+    public function showTermsConditions()
+    {
+        $data = [
+            'content' => "main/home/terms-conditions",
+            'legal' => Legal::first(),
         ];
 
         return view("main.layouts.wrapper", $data);
