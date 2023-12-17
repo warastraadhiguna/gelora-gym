@@ -126,7 +126,8 @@
                                                             @for($i = ($page * 7); $i < ($page * 7) + 7; $i++)
                                                             <li>
                                                                 <?php 
-                                                                    $specificSchedules = $court->schedules->where("operational_day_id", $nowDayNumber)->where("is_active", "1")->sortBy("operationalTime.index");  
+
+$specificSchedules = $court->schedules->where("operational_day_id", $nowDayNumber == 0 ? 7: $nowDayNumber )->where("is_active", "1")->sortBy("operationalTime.index");  
                                                                     $nowDayNumber++;
                                                                     $nowDayNumber = $nowDayNumber>7 ? $nowDayNumber - 7 :$nowDayNumber;
                                                                 ?>
