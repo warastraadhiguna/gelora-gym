@@ -42,7 +42,7 @@ class WebBookingController extends Controller
         }
 
         //temp booking and receipts delete last 15 minute ago
-        $tenMinutesAgo = DateConvert(DateFormat(\Carbon\Carbon::now()->addMinutes(-10), "Y/M/D HH:mm:ss"));
+        $tenMinutesAgo = DateConvert(DateFormat(\Carbon\Carbon::now()->addMinutes(-20), "Y/M/D HH:mm:ss"));
         TempBookingDetail::where([['created_at', '<=', $tenMinutesAgo]])->delete();
         Receipt::where([['created_at', '<=', $tenMinutesAgo], ['status', '0'] ])->delete();
 

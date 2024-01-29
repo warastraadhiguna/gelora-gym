@@ -12,11 +12,11 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
-        $data =[
+        $data = [
             'title' => "Manajemen User",
             'users' => User::orderby("role")->get(),
             'content' => "admin/user/index"
@@ -32,7 +32,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        $data =[
+        $data = [
             'title' => "Tambah User",
             'content' => "admin/user/add"
         ];
@@ -70,10 +70,7 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-
-    }
+    public function show($id) {}
 
     /**
      * Show the form for editing the specified resource.
@@ -92,7 +89,7 @@ class UserController extends Controller
             }
         }
 
-        $data =[
+        $data = [
             'title' => "Ubah User",
             'user' => $user,
             'content' => "admin/user/add"
