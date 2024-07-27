@@ -14,6 +14,7 @@ use App\Models\Schedule;
 use Illuminate\Http\Request;
 use App\Models\ReceiptDetail;
 use App\Models\OperationalTime;
+use App\Models\Payment;
 use App\Models\TempBookingDetail;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -26,7 +27,9 @@ class WebBookingController extends Controller
         $element = Request()->input("element");
         $page = Request()->input("page");
         $filter = Request()->input("filter");
+        $court_ids = Request()->input("court_ids");
 
+        $courtIdArray = $court_ids ? explode(",", $court_ids) : [];
         $filters = GetScheduleFilter();
         $date = $filters[1];
         $start_time = $filters[2];
@@ -62,7 +65,7 @@ class WebBookingController extends Controller
         }
 
         if($filter == '1') {
-            $errorMessage = $this->reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $id);
+            $errorMessage = $this->reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $id, $courtIdArray);
             if(!$errorMessage) {
                 $successMessage = "Data berhasil disimpan sesuai filter yang anda terapkan. ";
             }
@@ -74,11 +77,19 @@ class WebBookingController extends Controller
         //// search booked schedule from details side new ways
         $bookedDetails = ReceiptDetail::getBooked($nowTime);
         $bookedSchedulesString = "";
+        $bookedSchedulesInformation = "";
+
+        $isUser = auth()->user()->role == "user";
         for ($i = 0; $i < count($bookedDetails); $i++) {
             $bookingDetail = $bookedDetails[$i];
 
             $interval = date_create($nowTime->toDateString())->diff(date_create($bookingDetail->booking_date));
             $bookedSchedulesString = $bookedSchedulesString . 'link_' . $bookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
+            if($isUser) {
+                $bookedSchedulesInformation = $bookedSchedulesInformation . "Data sudah dibooking pelanggan lain!!;";
+            } else {
+                $bookedSchedulesInformation =  $bookedSchedulesInformation . "Data sudah dibooking " . $bookingDetail->name . "-" . $bookingDetail->number . "-" . $bookingDetail->note.  ";";
+            }
         }
         // dd($bookedSchedulesString);
 
@@ -104,7 +115,7 @@ class WebBookingController extends Controller
         // }
         // dd($bookedSchedulesString);,
         $totalPaidString = "Rp. " . NumberFormat($totalPaid) . ",-";
-        $html = view('main/booking/modal', array('building_id' => $building->id,'date' => $date,'start_time' => $start_time, 'end_time' => $end_time , 'court_quantity' => $court_quantity, 'repeatedDay' => $repeatedDay, 'repeatedPeriod' => $repeatedPeriod ))->render();
+        $html = view('main/booking/modal', array('building_id' => $building->id,'date' => $date,'start_time' => $start_time, 'end_time' => $end_time , 'court_quantity' => $court_quantity, 'repeatedDay' => $repeatedDay, 'repeatedPeriod' => $repeatedPeriod, 'building' => $building, 'courtIdArray' => $courtIdArray ))->render();
         $bookingHtml = view('main/booking/booking-tutorial-modal')->render();
         $continueProcessHtml = view('main/booking/continue-process-modal', array('building_id' => $building->id, 'totalPaidString' =>  $totalPaidString))->render();
 
@@ -121,6 +132,7 @@ class WebBookingController extends Controller
             'errorMessage' => $errorMessage,
             'successMessage' => $successMessage,
             'bookedSchedulesString' => $bookedSchedulesString,
+            'bookedSchedulesInformation' => $bookedSchedulesInformation,
             'tempBookingDetailString' => $tempBookingDetailString,
             'html' =>  trim(preg_replace('/\s+/', ' ', $html)),
             'bookingHtml' =>  trim(preg_replace('/\s+/', ' ', $bookingHtml)),
@@ -135,9 +147,15 @@ class WebBookingController extends Controller
     public function filter()
     {
         $post = Request()->all();
+        $courtIds = isset($post['courd_id']) ? $post['courd_id'] : [];
+        $courtIdAll = "";
+        foreach ($courtIds as $courtId) {
+            $courtIdAll = $courtIdAll . (string)$courtId . ",";
+        }
+
         $date = $post['date'] ? DateFormat(str_replace('/', '-', $post['date']), 'YYYY-MM-DD') : "";
 
-        return redirect("/booking" . "/" . $post['building_id'] . "?date=" . $date . "&start_time=" . $post['start_time'] . "&end_time=" . $post['end_time'] . "&court_quantity=" . $post['court_quantity'] . "&repeatedDay=" . $post['repeatedDay'] . "&repeatedPeriod=" . $post['repeatedPeriod'] . "&filter=1");
+        return redirect("/booking" . "/" . $post['building_id'] . "?date=" . $date . "&start_time=" . $post['start_time'] . "&end_time=" . $post['end_time'] . "&court_quantity=" . $post['court_quantity'] . "&repeatedDay=" . $post['repeatedDay'] . "&repeatedPeriod=" . $post['repeatedPeriod'] . "&filter=1&court_ids=$courtIdAll");
     }
 
     public function reserve(Request $request)
@@ -366,7 +384,13 @@ class WebBookingController extends Controller
         if($hashed == $request->signature_key) {
             if($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $receipt = Receipt::find($request->order_id);
-                $receipt->update(['status' => '1']);
+                $receipt->update(['status' => '2']);
+
+                Payment::create([
+                    "receipt_id" => $request->order_id,
+                    "user_id" => $receipt->user_id,
+                    "value" => $request->gross_amount
+                ]);
             }
         }
     }
@@ -447,7 +471,7 @@ class WebBookingController extends Controller
 
         return view("main.layouts.wrapper", $data);
     }
-    private function reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $building_id)
+    private function reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $building_id, $courtIdArray)
     {
         $date = $filters[1];
         $start_time = $filters[2];
@@ -455,6 +479,11 @@ class WebBookingController extends Controller
         $court_quantity = $filters[4];
         $repeatedDayValue = $repeatedDay == "1" ? 0 : $repeatedDay;
         // dd($repeatedDay);
+
+        if($courtIdArray && $court_quantity != sizeof($courtIdArray) - 1) {
+            return "Jumlah lapangan yang dibutuhkan tidak sama dengan jumlah lapangan yang dipilih!!";
+        }
+
         if($start_time && $end_time && $date) {
             $nowTime = \Carbon\Carbon::now();
             $nowTimeString = DateFormat($nowTime, "YYYY/MM/DD HH:mm");
@@ -469,7 +498,12 @@ class WebBookingController extends Controller
                 $operationalTimeArray[$key] =  $operationalTime->id;
             }
 
-            $courts = Court::where([['building_id', "=" ,$building_id], ["is_active", "1"]])->get();
+            $courtQuery = Court::where([['building_id', "=" ,$building_id], ["is_active", "1"]]);
+            if($courtIdArray) {
+                $courtQuery->whereIn('id', $courtIdArray);
+            }
+
+            $courts = $courtQuery->get();
             if(count($courts) < $court_quantity) {
                 return "Jumlah lapangan yang dibutuhkan tidak tersedia!!";
             }

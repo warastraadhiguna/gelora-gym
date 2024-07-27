@@ -15,5 +15,8 @@ class Receipt extends Model
         return $this->hasMany(ReceiptDetail::class);
     }
 
-
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

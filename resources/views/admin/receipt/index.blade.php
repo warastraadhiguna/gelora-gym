@@ -21,15 +21,15 @@
 
 <?php 
     $belumBayarTotal=0; 
-    $bayarTotal=0; 
-    $selesaiTotal=0;     
+    $bayarTotal=0;     
 ?>
 <table id="example1" class="table table-bordered table-striped" width="100%">
     <thead>
         <tr>
             <th width="5%">No</th>
-            <th width="35%">Penyewa</th>
+            <th>Penyewa</th>
             <th>Detail</th>
+            <th>Keuangan</th>
             <th width="10%">Action</th>
         </tr>
     </thead>
@@ -87,9 +87,6 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Gedung</label>
-                        </div>
-                        <div class="form-group">
                             <label>Jenis</label>
                         </div>
                         <div class="form-group">
@@ -99,8 +96,54 @@
                             <label>Tanggal</label>
                         </div>
                         <div class="form-group">
+                            <label>Gedung</label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="form-group">
+                            <label>:</label>
+                        </div>
+                        <div class="form-group">
+                            <label>:</label>
+                        </div>
+                        <div class="form-group">
+                            <label>:</label>
+                        </div>
+                        <div class="form-group">
+                            <label>:</label>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="form-group">
+                            <label>{{ $receipt->receiptDetails[0]->schedule->court->building->type->name }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ $receipt->number }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ DateFormat($receipt->created_at, "D MMMM Y") }}</label>
+                        </div>
+                        <div class="form-group">
+                            <label>{{ $receipt->receiptDetails[0]->schedule->court->building->name }}</label>
+                        </div>                        
+                    </div>
+                </div>
+            </td>
+            <td>
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="form-group">
                             <label>Biaya</label>
                         </div>
+                        <div class="form-group">
+                            <label>Disc.</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Total</label>
+                        </div>
+                        <div class="form-group">
+                            <label>Bayar</label>
+                        </div>                        
                         <div class="form-group">
                             <label>Status</label>
                         </div>
@@ -117,62 +160,80 @@
                         </div>
                         <div class="form-group">
                             <label>:</label>
-                        </div>
-                        <div class="form-group">
-                            <label>:</label>
-                        </div>
+                        </div>                        
                         <div class="form-group">
                             <label>:</label>
                         </div>
                     </div>
                     <div class="col-md-8">
                         <div class="form-group">
-                            <label>{{ $receipt->receiptDetails[0]->schedule->court->building->name }}</label>
-                        </div>
-                        <div class="form-group">
-                            <label>{{ $receipt->receiptDetails[0]->schedule->court->building->type->name }}</label>
-                        </div>
-                        <div class="form-group">
-                            <label>{{ $receipt->number }}</label>
-                        </div>
-                        <div class="form-group">
-                            <label>{{ DateFormat($receipt->created_at, "D MMMM Y") }}</label>
-                        </div>
-                        <div class="form-group">
                             <label>
                                 <?php
                             $total = 0;
                                 foreach ($receipt->receiptDetails as $receiptDetail) {
-                                    $total = $total + $receiptDetail->price;
-
-                                    if($receipt->status == '0'){
-                                        $belumBayarTotal = $belumBayarTotal + $receiptDetail->price;    
-                                    }
-                                    else if($receipt->status == '1'){
-                                        $bayarTotal = $bayarTotal + $receiptDetail->price;    
-                                    }           
-                                    else if($receipt->status == '2'){
-                                        $selesaiTotal = $selesaiTotal + $receiptDetail->price;    
-                                    }                                                               
+                                    $total = $total + $receiptDetail->price;                                                       
                                 }
 
                                 echo "Rp. " . NumberFormat($total);
                                 ?></label>
                         </div>
                         <div class="form-group">
-                            <label>{{ $receipt->status === '0'? "Belum Bayar" : ($receipt->status === '1'? "Bayar" : ($receipt->status === '2'? "Selesai" : "Block")) }}</label>
+                            <label>{{ "Rp. " .  NumberFormat($receipt->discount) }}</label>
                         </div>
+                        <div class="form-group">
+                            <label>{{ "Rp. " .  NumberFormat($total - $receipt->discount) }}</label>
+                        </div>                        
+                        <div class="form-group">
+                            <label>
+                        <?php
+                            $paymentTotal = 0;
+                                foreach ($receipt->payments as $payment) {
+                                    $paymentTotal = $paymentTotal + $payment->value;
+                                }
+
+                                echo "Rp. " . NumberFormat( $paymentTotal );
+
+                                $belumBayarTotal = $belumBayarTotal + ($total - $receipt->discount - $paymentTotal);
+                                $bayarTotal = $bayarTotal + ($total - $receipt->discount);
+                                ?>
+                            </label>
+                        </div>
+
+                        <div class="form-group">
+                            <label>{{ $receipt->status === '0'? "Belum Bayar" : ($receipt->status === '1'? "Bayar" : ($receipt->status === '2'? "Selesai" : "Block")) }}</label>
+                        </div>                        
                     </div>
-                </div>
+                </div>                
             </td>
             <td class="align-middle text-center">
-                @if($receipt->status != "2" )
-                <button type="button" class="btn btn-warning btn-sm my-2" data-toggle="modal"
-                    data-target="#update-modal" onclick="AddReceiptId({{ $receipt->id }})">
-                    <i class="fas fa-pen"></i> Status
+                <?php 
+                    $paymentNow = $total - $receipt->discount - $paymentTotal;
+                ?>
+
+                @if($receipt->status != "2" && $receipt->status != "1" && $paymentTotal == "0")
+                <button type="button" class="btn btn-outline-warning btn-sm my-2" data-toggle="modal"
+                    data-target="#update-discount" onclick="AddReceiptId({{ $receipt->id}}, {{ $paymentNow + $receipt->discount }})">
+                    <i class="fas fa-percent"></i> Discount
                 </button>                                    
                 @endif
-                @if($receipt->status === "3" )
+                @if($receipt->status != "2" && $receipt->status != "1")
+                <button type="button" class="btn btn-outline-success btn-sm my-2" data-toggle="modal"
+                    data-target="#update-payment" onclick="AddReceiptIdDetail({{ $receipt->id}}, {{ $paymentNow + $receipt->discount }}, {{ $receipt->payments }})">
+                    <i class="fas fa-money-check-alt"></i> Bayar
+                </button>                                    
+                @endif
+
+                @if($receipt->status != "2" )
+                    <form action="{{ URL::to('/admin/receipt') }}" method="POST" autocomplete="off">
+                        @csrf
+                        <input type="hidden" name="receipt_id" value="{{ $receipt->id }}"/>
+                        <input type="hidden" name="status" value="2">
+                        <input type="hidden" name="value" value="{{ $paymentNow }}">                    
+                        <button type="submit"  onclick="return confirm('Anda yakin menyelesaikan nota {{ $receipt->number }} dan membayar semua tagihannya?')" class="btn btn-warning btn-sm my-2"> <i class="fas fa-pen"></i> Selesai</button>
+                    </form>
+                @endif 
+
+                @if($receipt->status === "3" && $receipt->discount == "0" && $paymentTotal == "0")
                 <button type="button" class="btn btn-primary btn-sm my-2"  onclick="copyLink('{{ URL::to('/midtrans-payment/' . $receipt->id)  }}')">
                     <i class="fas fa-link"></i> Link
                 </button>                                    
@@ -185,6 +246,10 @@
                     <button onclick="return confirm('Anda yakin menghapus data ini?')" type="submit"
                         class="btn btn-danger btn-sm my-2"><i class="fas fa-times"></i> Hapus</button>
                 </form>                    
+                @endif
+
+                @if($receipt->status === '0')
+                    
                 @endif
             </td>
         </tr>
@@ -223,12 +288,49 @@
     </div>
     <!-- /.modal-dialog -->
 </div> --}}
-
-<div class="modal fade" id="update-modal">
+<div class="modal fade" id="update-payment">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Ubah Status</h4>
+                <h4 class="modal-title">Cicil Bayar</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" name="receipt_id_payment" id="receipt_id_payment"/>
+                <input type="hidden" name="payment_payment" id="payment_payment"/>
+                <label>Nilai Bayar</label>
+                <input type="number" class="form-control mb-3" id="value_payment" name="value" value="0">    
+
+                <button type="submit" class="btn btn-outline-success" onclick="addPayment()">Tambah</button>   
+                <hr/>               
+                <div class="text-center text-bold">Histori Pembayaran</div>      
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tanggal</th>
+                            <th>Nilai</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="payment-body-table">
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="update-discount">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Ubah Discount</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -237,16 +339,12 @@
                 <form action="{{ URL::to('/admin/receipt') }}" method="POST" autocomplete="off">
                     @csrf
                     <input type="hidden" name="receipt_id" id="receipt_id"/>
-                    <div class="form-group">
-                        <label for="">Status</label>
-                        <select name="status" id="status" class="form-control">
-                            <option value="1">Bayar 
-                            </option>
-                            <option value="2">Selesai 
-                            </option>                            
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <input type="hidden" name="status" value="-1"/>
+                    <input type="hidden" name="payment" id="payment"/>
+
+                    <input type="number" class="form-control mb-3" name="discount" value="0">    
+
+                    <button type="submit" class="btn btn-outline-warning">Ubah</button>
                 </form>
             </div>
         </div>
@@ -334,16 +432,11 @@
                             <td width="30%">Bayar</td>
                             <td width="1%">:</td>
                             <td>Rp. {{ NumberFormat($bayarTotal) }}</td>
-                        </tr>     
-                        <tr>
-                            <td width="30%">Selesai</td>
-                            <td width="1%">:</td>
-                            <td>Rp. {{ NumberFormat($selesaiTotal) }}</td>
                         </tr>   
                         <tr>
                             <td width="30%">Total</td>
                             <td width="1%">:</td>
-                            <td>Rp. {{ NumberFormat($selesaiTotal + $bayarTotal + $belumBayarTotal) }}</td>
+                            <td>Rp. {{ NumberFormat($bayarTotal + $belumBayarTotal) }}</td>
                         </tr>                                                                     
                     </tbody>
                 </table>
@@ -354,9 +447,104 @@
     <!-- /.modal-dialog -->
 </div>
 <script>
-    const AddReceiptId = (id) =>{
+    const AddReceiptId = (id, payment) =>{
         document.getElementById("receipt_id").value=id;
+        document.getElementById("payment").value=payment;    
     }
+
+
+    const deletePayment = (id) =>{
+        if(confirm("Anda yakin menghapus data ini?")){
+            const myFormData = {
+                "_token": "{{ csrf_token() }}",
+            };            
+            $.ajax({
+                type: 'DELETE',
+                url: "<?= URL::to('/admin/payment'); ?>" + "/" + id,
+                data: myFormData,                
+                success: function(data) {
+                    if(data){
+                        alert(data);
+                    }else{
+                        alert("Data berhasil dihapus!");
+                        location.reload();
+                    }
+                },
+                error: function (e) {
+                    alert(e.statusText);
+                }
+            });
+        }
+
+    };
+
+    const addPayment = () =>{
+        const receipt_id = document.getElementById("receipt_id_payment").value;
+        const payment = Number(document.getElementById("payment_payment").value);
+        const valueString = document.getElementById("value_payment").value;        
+        const reg = /^\d+$/;
+        if(!reg.test(valueString))
+        {
+            alert("Nilai harus angka");
+            return;
+            
+        }
+
+        const value = Number(valueString);
+        if(!Number.isInteger(value) || value < 0){
+            alert("Nilai harus positif lebih dari 0");
+            return;
+        }
+
+        if(value > payment){
+            alert("Nilai bayar tidak boleh lebih dari sisa pembayaran");
+            return;
+        }
+
+        const myFormData = {
+            receipt_id, payment, value, "_token": "{{ csrf_token() }}",
+        };            
+
+        $.ajax({
+            type: 'POST',
+            url: "<?= URL::to('/admin/payment'); ?>",
+            data: myFormData,                
+            success: function(data) {
+                if(data){
+                    alert(data);
+                }else{
+                    alert("Data berhasil ditambah!");
+                    location.reload();
+                }
+            },
+            error: function (e) {
+                alert(e.statusText);
+            }
+        });
+    };
+
+  const AddReceiptIdDetail = (id, paymentNow, payments) => {
+    document.getElementById("receipt_id_payment").value=id;
+    document.getElementById("payment_payment").value=paymentNow;  
+
+    $("#payment-body-table").find("tr").remove();
+
+    payments.forEach((payment, i) => {
+        const createdAt = new Date(payment.created_at) ;
+
+      let row =
+        "<tr><td>" +
+        (i + 1) +
+        "</td><td>" +  createdAt.getDate() + "-" +  (createdAt.getMonth() + 1) + "-" + createdAt.getFullYear()
+         +
+        "</td><td>" +
+        payment.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") +
+        '</td><td  align="center" ><button onclick="deletePayment('+ payment.id +')" id="delete_' +
+        payment.id +
+        '" class="text-danger">Hapus</button></td></tr>';
+      $("#payment-body-table").append(row);
+    });
+  };
 
   function reloadPage(){
     const startDateFilter = document.getElementById("startDateFilter").value;

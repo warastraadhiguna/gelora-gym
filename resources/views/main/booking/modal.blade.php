@@ -1,6 +1,6 @@
 <form id="booking-filter" action="{{ URL::to('/booking-filter')}}" method="POST">
     @csrf       
-    <div class="row">   
+    <div class="row mt-5">   
         <div class="col-md-12">         
             <input type="text" class="form-control text-center btn-outline-dark border-0 text-danger bg" value="Isi semua, untuk mendapatkan data tertentu." readonly/>
         </div>	
@@ -59,9 +59,24 @@
                     @endforeach
                 </select>	
             </div>	 
+        </div>	   
+        <div class="col-12 col-md-6 offset-md-3">       
+            <div class="card">
+                <div class="card-body" style=" background-color: #f8f9fa;border: 2px solid #9e9b9b; ">
+                    <h5 class="card-title">Pilihan Lapangan </h5>
+                    <small>(kosongi saja jika tidak memilih spesifik lapangan)</small>
+                    @foreach($building->courts as $key => $court)     
+                        <div class="form-check mt-4">
+                            <input class="form-check-input" name="courd_id[]" type="checkbox" value="{{ $court->id }}" id="checkbox{{ $key }}" style="width: 25px;height: 25px;" {{ in_array($court->id , $courtIdArray)? "checked" : ""  }}>
+                            <label class="form-check-label mt-1" for="checkbox{{ $key }}">
+                                {{ $court->name }}
+                            </label>
+                        </div>
+                    @endforeach  
+                </div>
+            </div>
         </div>	        
-    </div>	 
-    <br/>
+    </div>     
     <hr/>
     <button type="button" id="booking-filter-submit" class="btn btn-danger">Terapkan</button>    
     <button type="button" class="btn btn-warning" id="btnClose">Batal</button>

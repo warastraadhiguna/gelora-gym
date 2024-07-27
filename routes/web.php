@@ -7,20 +7,21 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CourtController;
+use App\Http\Controllers\LegalController;
 use App\Http\Controllers\BenefitController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ReceiptController;
 use App\Http\Controllers\WebUserController;
 use App\Http\Controllers\BuildingController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\WebBookingController;
 use App\Http\Controllers\WebBuildingController;
 use App\Http\Controllers\BlogCategoryController;
-use App\Http\Controllers\LegalController;
 use App\Http\Controllers\WeeklyBookingController;
 use App\Http\Controllers\LoginWithGoogleController;
-use App\Http\Controllers\QuestionController;
 
 Route::get('/home', [HomeController::class, "index"]);
 
@@ -88,6 +89,7 @@ Route::prefix('/admin')->middleware(['auth', 'admin'])->group(
         Route::get('/schedule/create', [ScheduleController::class, "create"]);
         Route::post('/schedule', [ScheduleController::class, "store"]);
         Route::resource('/receipt', ReceiptController::class);
+        Route::resource('/payment', PaymentController::class);
         Route::post('/receipt-date-change', [ReceiptController::class, "changeDate"]);
 
         Route::get('/weekly-booking', [WeeklyBookingController::class, "index"]);

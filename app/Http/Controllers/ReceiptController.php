@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
+use App\Models\Payment;
 use App\Models\Receipt;
 use App\Models\Building;
 use App\Models\Schedule;
@@ -36,7 +38,7 @@ class ReceiptController extends Controller
 
         $data = [
             'title' => "Manajemen Data Nota",
-            'receipts' => Receipt::where($whereQuery)->orderby("status", "asc")->orderby("created_at", "desc")->get(),
+            'receipts' => Receipt::with("receiptDetails", "payments")->where($whereQuery)->orderby("status", "asc")->orderby("created_at", "desc")->get(),
             'content' => "admin/receipt/index",
             'endDate' => $endDate,
             'startDate' => $startDate,
@@ -76,23 +78,46 @@ class ReceiptController extends Controller
             return redirect("/admin/receipt");
         }
 
-        $receipt = Receipt::find($receipt_id);
         $data = $request->validate([
             'status' => 'required',
+            'discount' => 'sometimes|integer',
         ]);
 
-        $data['updated_user_id'] = auth()->user()->id;
+        // dd($data);
 
-        if($receipt->status === '0' && $data['status'] === '2') {
-            Alert::error('Error', "Nota harus dibayar dahulu!!");
+        try {
 
+            DB::beginTransaction();
+
+            $receipt = Receipt::find($receipt_id);
+            $data['updated_user_id'] = auth()->user()->id;
+
+            if($data['status'] === '2') {
+                Payment::create([
+                    "receipt_id" => $receipt_id,
+                    "user_id" => auth()->user()->id,
+                    "value" => $request->input("value")
+                ]);
+            } elseif($data['status'] === '-1') {
+                unset($data['status']);
+
+                if($request->input("payment") <= $data['discount']) {
+                    DB::rollback();
+                    Alert::error('Error', "Discount tidak boleh lebih besar dari pembayaran");
+                    return redirect("/admin/receipt");
+                }
+            }
+
+            $receipt->update($data);
+            Alert::success('Sukses', "Data nota ". $receipt->number ." sudah berubah.");
+
+            DB::commit();
+        } catch (Exception $e) {
+            DB::rollback();
+            Alert::error('Error', $e->getMessage());
+        } finally {
             return redirect("/admin/receipt");
         }
-
-        $receipt->update($data);
-        Alert::success('Sukses', 'Data berhasil diubah.');
-
-        return redirect("/admin/receipt");
     }
 
     /**
@@ -178,7 +203,6 @@ class ReceiptController extends Controller
         $data = $request->validate([
             'status' => 'required',
         ]);
-
         $receipt->update($data);
         Alert::success('Sukses', 'Data berhasil diupdate.');
 
@@ -276,10 +300,6 @@ class ReceiptController extends Controller
             }
 
             $receipt = Receipt::find($id);
-
-            if($receipt->image_url) {
-                Storage::delete($receipt->image_url);
-            }
 
             $receipt->delete();
             Alert::success('Sukses', 'Data berhasil dihapus.');

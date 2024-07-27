@@ -177,6 +177,7 @@
 
     <!-- Custom JS -->
     <script src="{{ URL::to('/')}}/assets/js/script.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> --}}
     <script>
     const windowWidth = window.innerWidth;        
     $(document).ready(function(){
@@ -191,8 +192,17 @@
             scrollTop: $("#focusToElement").offset().top
         }, 2000);
     }
-});    
+
+       $("#paket").select2({
+
+                    placeholder: "Silahkan Pilih"
+
+                });
+});   
+
     </script>
+
+    
 </body>
 
 </html>

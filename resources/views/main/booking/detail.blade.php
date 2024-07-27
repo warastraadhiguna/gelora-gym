@@ -57,6 +57,7 @@
                         </div>                    
                     </div>
                 </div>  
+
                 <a class="btn btn-link m-1" href="#" onclick="showTutorial()">Tutorial Pemesanan</a>
                 <a id="upper-continue-process-button" style="visibility: hidden" class="btn btn-primary submit-btn m-1" href="{{ URL::to('/checkout') . "/" . $building->id }}">Lanjutkan Pemrosesan</a>                
                 <div class="dct-appoinment">
@@ -221,14 +222,17 @@ window.onload = function(){
     });
 
     const bookedSchedulesString = '{{ $bookedSchedulesString }}';
+    const bookedSchedulesInformation = '{{ $bookedSchedulesInformation }}';    
 
     const bookedScheduleArray = bookedSchedulesString.split(";");
-    bookedScheduleArray.forEach(bookedSchedules => {
+    const bookedSchedulesInformationArray = bookedSchedulesInformation.split(";");
+ 
+    bookedScheduleArray.forEach((bookedSchedules, index) => {
         if(bookedSchedules){
             let element = document.getElementById(bookedSchedules);
             if(element){
                 element.className = "timing booked";
-                element.title = "Jadwal sudah dibooking pelanggan lain!!";
+                element.title = bookedSchedulesInformationArray[index]; 
             }
         }
     });
@@ -368,7 +372,7 @@ function reserve (id, iteration)
         });
     }
     else{
-        alert("Jadwal sudah digunakan!!");
+        alert(linkElement.title? linkElement.title : "Jadwal sudah digunakan orang lain!!");
     }
     bookingContentElement.style.display= "block";
 };

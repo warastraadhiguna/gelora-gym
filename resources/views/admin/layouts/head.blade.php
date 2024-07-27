@@ -24,6 +24,6 @@
 
   <link rel="icon" type="image/x-icon" href="{{ URL::to('/storage') }}/{{ $company->icon_url  }}">  
 </head>
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition sidebar-mini layout-fixed  sidebar-collapse">
 <!-- Site wrapper -->
 <div class="wrapper">
