@@ -47,6 +47,7 @@ Route::get('/receipt/{id}', [WebBookingController::class, "receipt"])->middlewar
 Route::post('/reserve', [WebBookingController::class, "reserve"])->middleware('auth');
 Route::post('/delete-reserve', [WebBookingController::class, "deleteReserve"])->middleware('auth');
 Route::post('/delete-booking', [WebBookingController::class, "deleteBooking"])->middleware('auth');
+Route::post('/valid-time-checking', [WebBookingController::class, "checkValidTime"])->middleware('auth');
 
 Route::get('/dashboard', [WebUserController::class, "index"])->middleware('auth');
 Route::get('/profile', [WebUserController::class, "profile"])->middleware('auth');

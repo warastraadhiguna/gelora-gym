@@ -21,6 +21,8 @@ use RealRashid\SweetAlert\Facades\Alert;
 
 class WebBookingController extends Controller
 {
+    private $deletedBookingMinute = 20;
+    private $midtrandLimitMinute = 1;
     public function detail($id)
     {
         $building = Building::find($id);
@@ -45,7 +47,8 @@ class WebBookingController extends Controller
         }
 
         //temp booking and receipts delete last 15 minute ago
-        $tenMinutesAgo = DateConvert(DateFormat(\Carbon\Carbon::now()->addMinutes(-20), "Y/M/D HH:mm:ss"));
+        $tenMinutesAgo = DateConvert(DateFormat(\Carbon\Carbon::now()->addMinutes(-$this->deletedBookingMinute), "Y/M/D HH:mm:ss"));
+        // dd($tenMinutesAgo);
         TempBookingDetail::where([['created_at', '<=', $tenMinutesAgo]])->delete();
         Receipt::where([['created_at', '<=', $tenMinutesAgo], ['status', '0'] ])->delete();
 
@@ -575,6 +578,24 @@ class WebBookingController extends Controller
 
             TempBookingDetail::insert($tempBookingDetails);
             return "";
+        }
+    }
+
+    public function checkValidTime(Request $request)
+    {
+        if($request->id) {
+            $receipt = Receipt::find($request->id);
+            $now = \Carbon\Carbon::now()->addMinutes(-$this->deletedBookingMinute + $this->midtrandLimitMinute);
+            $createdAt = new \Carbon\Carbon($receipt->created_at);
+            $remainingTime = $createdAt->diffInMinutes($now);
+            // return $remainingTime ;
+            if($remainingTime == 0) {
+                return "Anda sudah melewati batas waktu pemesanan, silahkan lakukan pemesanan ulang";
+            }
+
+            return "";
+        } else {
+            return "Terjadi Internal Error. Silahkan refresh atau hubungi administrator.";
         }
     }
 }

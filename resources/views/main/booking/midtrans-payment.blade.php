@@ -140,25 +140,44 @@
   var payButton = document.getElementById('pay-button');
   payButton.addEventListener('click', function () {
     // Trigger snap popup. @TODO: Replace TRANSACTION_TOKEN_HERE with your transaction token
-    window.snap.pay('{{ $snapToken }}', {
-      onSuccess: function(result){
-        /* You may add your own implementation here */
-        alert("Pembayaran Sukses!"); 
-        const url = '<?= URL::to('/success-booking/' . $receipt->id); ?>';
-        window.open(url,  '_self');        
-      },
-      onPending: function(result){
-        /* You may add your own implementation here */
-        alert("Sedang menunggu pembayaran anda!"); console.log(result);
-      },
-      onError: function(result){
-        /* You may add your own implementation here */
-        alert("Pembayaran Gagal!"); console.log(result);
-      },
-      onClose: function(){
-        /* You may add your own implementation here */
-        alert('Anda menutup pop up tanpa melakukan pembayaran');
-      }
-    })
+    const myFormData = {
+        "_token": "{{ csrf_token() }}",
+        "id" : <?= $receipt->id; ?>
+    };    
+    $.ajax({
+        type: 'POST',
+        url: "<?= URL::to('/valid-time-checking'); ?>",
+        data: myFormData,                
+        success: function(data) {
+            if(data){
+                alert(data);
+                window.open("<?= URL::to('/building'); ?>",  '_self');                   
+            }else{
+                window.snap.pay('{{ $snapToken }}', {
+                    onSuccess: function(result){
+                        /* You may add your own implementation here */
+                        alert("Pembayaran Sukses!"); 
+                        const url = '<?= URL::to('/success-booking/' . $receipt->id); ?>';
+                        window.open(url,  '_self');        
+                    },
+                    onPending: function(result){
+                        /* You may add your own implementation here */
+                        alert("Sedang menunggu pembayaran anda!"); console.log(result);
+                    },
+                    onError: function(result){
+                        /* You may add your own implementation here */
+                        alert("Pembayaran Gagal!"); console.log(result);
+                    },
+                    onClose: function(){
+                        /* You may add your own implementation here */
+                        alert('Anda menutup pop up tanpa melakukan pembayaran');
+                    }
+                })
+            }
+        },
+        error: function (e) {
+            alert(e.statusText);
+        }
+    });
   });
 </script>
