@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Exception;
-
 // use Midtrans\Snap;
 use Midtrans\Snap;
 use Midtrans\Config;
@@ -42,7 +41,7 @@ class WebBookingController extends Controller
         $errorMessage = "";
         $successMessage = "";
 
-        if($page == "") {
+        if ($page == "") {
             TempBookingDetail::where([['user_id', auth()->user()->id]])->delete();
         }
 
@@ -67,9 +66,9 @@ class WebBookingController extends Controller
             $nowTimes[$key] =  DateConvert(DateFormat($nowTime, "Y/M/D"));
         }
 
-        if($filter == '1') {
+        if ($filter == '1') {
             $errorMessage = $this->reserveFromFilter($filters, $repeatedDay, $repeatedPeriod, $id, $courtIdArray);
-            if(!$errorMessage) {
+            if (!$errorMessage) {
                 $successMessage = "Data berhasil disimpan sesuai filter yang anda terapkan. ";
             }
         }
@@ -88,7 +87,7 @@ class WebBookingController extends Controller
 
             $interval = date_create($nowTime->toDateString())->diff(date_create($bookingDetail->booking_date));
             $bookedSchedulesString = $bookedSchedulesString . 'link_' . $bookingDetail->schedule_id . '_' . ($page * 7 + $interval->format("%d")) . ";";
-            if($isUser) {
+            if ($isUser) {
                 $bookedSchedulesInformation = $bookedSchedulesInformation . "Data sudah dibooking pelanggan lain!!;";
             } else {
                 $bookedSchedulesInformation =  $bookedSchedulesInformation . "Data sudah dibooking " . $bookingDetail->name . "-" . $bookingDetail->number . "-" . $bookingDetail->note.  ";";
@@ -256,7 +255,7 @@ class WebBookingController extends Controller
             $nowTime = \Carbon\Carbon::now();
             $tempBookingDetails = TempBookingDetail::where([['user_id', auth()->user()->id],['booking_date', '>=',DateFormat($nowTime, "Y/M/D")]]);
 
-            if(count($tempBookingDetails->get()) == 0) {
+            if (count($tempBookingDetails->get()) == 0) {
                 return redirect("building");
             }
 
@@ -283,7 +282,7 @@ class WebBookingController extends Controller
 
                 $tempBookingDetailExist = ReceiptDetail::where([['schedule_id', $tempBookingDetail->schedule_id],['booking_date', '=',DateFormat($tempBookingDetail->booking_date, "Y/M/D")]])->first();
 
-                if($tempBookingDetailExist) {
+                if ($tempBookingDetailExist) {
                     $errorMessage = $errorMessage . DateFormat($tempBookingDetail->booking_date, "DD MMMM YY") . "=>" . $tempBookingDetail->schedule->operationalTime->name . "; \n\r";
                 }
 
@@ -294,7 +293,7 @@ class WebBookingController extends Controller
                 // }
             }
 
-            if($errorMessage) {
+            if ($errorMessage) {
                 DB::rollback();
                 Alert::error('Error', "Terdapat jadwal yang sudah dibooking diwaktu yang sama!! Silahkan hapus jadwal yang dicoret!!");
                 $tempBookingDetails->update(['is_booked' => '1']);
@@ -308,7 +307,7 @@ class WebBookingController extends Controller
             DB::commit();
 
             //3 for blocking data
-            if(isset($data['status']) && $data['status'] === "3") {
+            if (isset($data['status']) && $data['status'] === "3") {
                 return redirect("admin/receipt");
 
             } else {
@@ -335,7 +334,7 @@ class WebBookingController extends Controller
             Config::$is3ds = true;
 
             $receipt = Receipt::find($id);
-            if($receipt == null) {
+            if ($receipt == null) {
                 return redirect("/");
             }
 
@@ -384,8 +383,8 @@ class WebBookingController extends Controller
         $serverKey = config('midtrans.server_key');
         $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
 
-        if($hashed == $request->signature_key) {
-            if($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
+        if ($hashed == $request->signature_key) {
+            if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
                 $receipt = Receipt::find($request->order_id);
                 $receipt->update(['status' => '2']);
 
@@ -401,11 +400,11 @@ class WebBookingController extends Controller
     public function success($id)
     {
         $receipt = Receipt::find($id);
-        if($receipt == null) {
+        if ($receipt == null) {
             return redirect("/");
         }
 
-        if($receipt->user_id != auth()->user()->id) {
+        if ($receipt->user_id != auth()->user()->id) {
             return redirect("/");
         }
 
@@ -423,11 +422,11 @@ class WebBookingController extends Controller
     public function receipt($id)
     {
         $receipt = Receipt::find($id);
-        if($receipt == null) {
+        if ($receipt == null) {
             return redirect("/");
         }
 
-        if($receipt->user_id != auth()->user()->id) {
+        if ($receipt->user_id != auth()->user()->id) {
             return redirect("/");
         }
 
@@ -439,7 +438,7 @@ class WebBookingController extends Controller
             $isFound = false;
 
             for ($j = 0; $j < count($receiptDetailArray); $j++) {
-                if($receiptDetail->schedule->court->name === $receiptDetailArray[$j]['court'] && DateFormat($receiptDetail->booking_date, "D MMMM Y") === $receiptDetailArray[$j]['date']) {
+                if ($receiptDetail->schedule->court->name === $receiptDetailArray[$j]['court'] && DateFormat($receiptDetail->booking_date, "D MMMM Y") === $receiptDetailArray[$j]['date']) {
                     $receiptDetailArray[$j]['schedule'] = $receiptDetailArray[$j]['schedule'] . ', ' . $receiptDetail->schedule->operationalTime->name;
                     $receiptDetailArray[$j]['price'] = $receiptDetailArray[$j]['price'] + $receiptDetail->price;
 
@@ -448,7 +447,7 @@ class WebBookingController extends Controller
                 }
             }
 
-            if(!$isFound) {
+            if (!$isFound) {
                 $receiptDetailArray[$i] = [
                     'court' => $receiptDetail->schedule->court->name,
                     'date' => DateFormat($receiptDetail->booking_date, "D MMMM Y"),
@@ -483,15 +482,15 @@ class WebBookingController extends Controller
         $repeatedDayValue = $repeatedDay == "1" ? 0 : $repeatedDay;
         // dd($repeatedDay);
 
-        if($courtIdArray && $court_quantity != sizeof($courtIdArray) - 1) {
+        if ($courtIdArray && $court_quantity != sizeof($courtIdArray) - 1) {
             return "Jumlah lapangan yang dibutuhkan tidak sama dengan jumlah lapangan yang dipilih!!";
         }
 
-        if($start_time && $end_time && $date) {
+        if ($start_time && $end_time && $date) {
             $nowTime = \Carbon\Carbon::now();
             $nowTimeString = DateFormat($nowTime, "YYYY/MM/DD HH:mm");
 
-            if(($nowTimeString > DateFormat($date . " $end_time", "YYYY/MM/DD HH:mm")) || (($nowTimeString <= DateFormat($date . " $end_time", "YYYY/MM/DD HH:mm")) && ($nowTimeString >= DateFormat($date . " $start_time", "YYYY/MM/DD HH:mm")))) {
+            if (($nowTimeString > DateFormat($date . " $end_time", "YYYY/MM/DD HH:mm")) || (($nowTimeString <= DateFormat($date . " $end_time", "YYYY/MM/DD HH:mm")) && ($nowTimeString >= DateFormat($date . " $start_time", "YYYY/MM/DD HH:mm")))) {
                 return "Waktu saat ini, sudah melewati jadwal yang anda pilih!";
             }
 
@@ -502,12 +501,12 @@ class WebBookingController extends Controller
             }
 
             $courtQuery = Court::where([['building_id', "=" ,$building_id], ["is_active", "1"]]);
-            if($courtIdArray) {
+            if ($courtIdArray) {
                 $courtQuery->whereIn('id', $courtIdArray);
             }
 
             $courts = $courtQuery->get();
-            if(count($courts) < $court_quantity) {
+            if (count($courts) < $court_quantity) {
                 return "Jumlah lapangan yang dibutuhkan tidak tersedia!!";
             }
 
@@ -535,7 +534,7 @@ class WebBookingController extends Controller
 
                     foreach ($schedules as $schedule) {
                         $receiptDetailExist = ReceiptDetail::where([['schedule_id', $schedule->id], ['booking_date', $dateString]])->first();
-                        if($receiptDetailExist) {
+                        if ($receiptDetailExist) {
                             $isAvailableCourt = false;
                             break;
                         }
@@ -548,31 +547,31 @@ class WebBookingController extends Controller
                         $tempBookingPerScheduleIndex++;
                     } //end of schedule foreach
 
-                    if(!$isAvailableCourt) {
+                    if (!$isAvailableCourt) {
                         break;
                     }
                 } //end of repeated period foreach
 
-                if($isAvailableCourt) {
+                if ($isAvailableCourt) {
                     $tempBookingPerCourtArray[$courtIndex] = $tempBookingPerScheduleArray;
                     $courtIndex++;
                 }
             } // end of court foreach
 
-            if(count($tempBookingPerCourtArray) < $court_quantity) {
+            if (count($tempBookingPerCourtArray) < $court_quantity) {
                 return "Jumlah lapangan yang dibutuhkan tidak tersedia!!";
             }
 
             $tempBookingDetails = array();
             $tempBookingDetailIndex = 0;
-            for($i = 0; $i < $court_quantity; $i++) {
+            for ($i = 0; $i < $court_quantity; $i++) {
                 foreach ($tempBookingPerCourtArray[$i] as $tempBookingPerSchedule) {
                     $tempBookingDetails[$tempBookingDetailIndex] = $tempBookingPerSchedule;
                     $tempBookingDetailIndex++;
                 }
             }
 
-            if(($court_quantity * count($operationalTimes) * ($repeatedPeriod + 1)) != count($tempBookingDetails)) {
+            if (($court_quantity * count($operationalTimes) * ($repeatedPeriod + 1)) != count($tempBookingDetails)) {
                 return "Terdapat jadwal yang tidak tersedia!!";
             }
 
@@ -583,13 +582,15 @@ class WebBookingController extends Controller
 
     public function checkValidTime(Request $request)
     {
-        if($request->id) {
+        if ($request->id) {
             $receipt = Receipt::find($request->id);
-            $now = \Carbon\Carbon::now()->addMinutes(-$this->deletedBookingMinute + $this->midtrandLimitMinute);
+            $now = \Carbon\Carbon::now()->addMinutes(-$this->deletedBookingMinute + $this->midtrandLimitMinute + 1);
+
             $createdAt = new \Carbon\Carbon($receipt->created_at);
             $remainingTime = $createdAt->diffInMinutes($now);
+
             // return $remainingTime ;
-            if($remainingTime == 0) {
+            if ($remainingTime == 0) {
                 return "Anda sudah melewati batas waktu pemesanan, silahkan lakukan pemesanan ulang";
             }
 
