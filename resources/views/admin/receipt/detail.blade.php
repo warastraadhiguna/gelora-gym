@@ -1,4 +1,11 @@
 @include('sweetalert::alert')
+@if($errors->any())
+<div class="alert alert-danger" role="alert">
+    @foreach($errors->all() as $error)
+        <div>{{ $error }}</div>
+    @endforeach
+</div>
+@endif
 <div class="content">
     <div class="container-fluid">
         <div class="row">
@@ -64,7 +71,7 @@
                                                 <th class="text-center">Tanggal</th>
                                                 <th class="text-center">Jadwal</th>
                                                 <th class="text-center">Harga</th>
-                                                @if($receipt->status !== '2' )
+                                                @if((string) $receipt->status !== '2' || auth()->user()->role === 'superadmin')
                                                 <th class="text-center">#</th>
                                                 @endif
                                             </tr>
@@ -79,11 +86,11 @@
                                                 </td>
                                                 <td class="text-center align-center">{{ $receipsDetail['schedule']}}</td>
                                                 <td class="text-center align-center">Rp. {{ NumberFormat($receipsDetail['price']) }}</td>
-                                                @if($receipt->status !== '2' )
+                                                @if((string) $receipt->status !== '2' || auth()->user()->role === 'superadmin')
                                                 <th class="text-center align-center">
                                                     <button type="button" class="btn btn-warning" data-toggle="modal"
                                                         data-target="#update-modal" onclick="AddReceiptId({{ $receipt->id }}, '{{ $receipsDetail['real_date'] }}')">
-                                                        <i class="fas fa-pen"></i>Ubah
+                                                        <i class="fas fa-pen"></i> Ubah Tanggal
                                                     </button>   
                                                 </th>
                                                 @endif
@@ -95,7 +102,7 @@
                                             <tr>
                                                 <th class="text-center" colspan="4">Total</th>
                                                 <th class="text-center"><span>Rp. {{ NumberFormat($total) }}</span></th>
-                                                @if($receipt->status !== '2' )                                                
+                                                @if((string) $receipt->status !== '2' || auth()->user()->role === 'superadmin')
                                                 <th></th>
                                                 @endif
                                             </tr>
@@ -122,7 +129,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title">Ubah Status</h4>
+                <h4 class="modal-title">Ubah Tanggal Booking</h4>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -133,9 +140,10 @@
                     <input type="hidden" name="receipt_id" id="receipt_id"/>
                     <input type="hidden" name="booking_date" id="booking_date"/>
 
+                    <p>Semua lapangan dan jam pada tanggal yang dipilih dalam nota ini akan dipindahkan. Nominal pembayaran tetap sama.</p>
                     <div class="form-group">
                         <label for="">Tanggal Baru</label>
-                        <input class="form-control" value="" name="new_date"  id="new_date" type="date"/> 
+                        <input class="form-control" value="" name="new_date"  id="new_date" type="date" min="{{ now()->toDateString() }}" required/>
                     </div>
                     <button type="submit" onclick="return confirm('Anda yakin mengubah data ini?')" class="btn btn-primary">Simpan</button>
                 </form>

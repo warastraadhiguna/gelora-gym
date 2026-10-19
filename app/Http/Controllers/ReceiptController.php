@@ -220,64 +220,64 @@ class ReceiptController extends Controller
     public function changeDate(Request $request)
     {
         $data = $request->validate([
-            'receipt_id' => 'required',
-            'booking_date' => 'required',
-            'new_date' => 'required',
+            'receipt_id' => 'required|integer|exists:receipts,id',
+            'booking_date' => 'required|date_format:Y-m-d',
+            'new_date' => 'required|date_format:Y-m-d|after_or_equal:today',
         ]);
 
-        $model = ReceiptDetail::with('receipt', 'schedule')->where([['receipt_id', $data['receipt_id']], ['booking_date', $data['booking_date']]]);
-        $details = $model->get();
-        $insertedData = array();
-        $i = 0;
+        try {
+            DB::transaction(function () use ($data) {
+                $receipt = Receipt::whereKey($data['receipt_id'])->lockForUpdate()->firstOrFail();
+                abort_if((string) $receipt->status === '2' && auth()->user()->role !== 'superadmin', 403);
 
-        $availableSchedule = true;
+                $details = ReceiptDetail::with('schedule')
+                    ->where('receipt_id', $receipt->id)
+                    ->whereDate('booking_date', $data['booking_date'])
+                    ->lockForUpdate()->get();
 
-        foreach ($details as $detail) {
-            $schedule = Schedule::where([['court_id', $detail->schedule->court_id], ['operational_time_id', $detail->schedule->operational_time_id], ['operational_day_id',\Carbon\Carbon::parse($data['new_date'])->dayOfWeek]])->first();
-            if ($schedule) {
-                $insertedData[$i] = [
-                    'receipt_id' => $data['receipt_id'],
-                    'schedule_id' => $schedule->id,
-                    'booking_date' =>  $data['new_date'],
-                    'price' => $schedule->price
-                ];
-
-                $i++;
-            } else {
-                $availableSchedule = false;
-                break;
-            }
-        }
-        if(!$availableSchedule) {
-            Alert::error('Error', 'Terdapat jadwal yang tidak dapat digeser karena tidak tersedia.');
-        } else {
-            $isFound = false;
-            foreach ($insertedData as $insertedSingle) {
-                $foundData = ReceiptDetail::where([['schedule_id', $insertedSingle['schedule_id']], ['booking_date', $data['booking_date']]])->first();
-
-                if ($foundData) {
-                    $isFound = true;
-                    break;
+                if ($details->isEmpty()) {
+                    throw \Illuminate\Validation\ValidationException::withMessages([
+                        'booking_date' => 'Booking pada tanggal tersebut tidak ditemukan.',
+                    ]);
                 }
-            }
 
-            if(!$isFound) {
-                try {
-                    DB::beginTransaction();
-                    $model->delete();
+                $changes = [];
+                foreach ($details as $detail) {
+                    $schedule = Schedule::where('court_id', $detail->schedule->court_id)
+                        ->where('operational_time_id', $detail->schedule->operational_time_id)
+                        ->where('operational_day_id', \Carbon\Carbon::parse($data['new_date'])->dayOfWeekIso)
+                        ->lockForUpdate()->first();
 
-                    ReceiptDetail::insert($insertedData);
-                    Alert::success('Sukses', 'Data berhasil diupdate.');
+                    if (!$schedule) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'new_date' => 'Jadwal lapangan dan jam yang sama tidak tersedia pada tanggal baru.',
+                        ]);
+                    }
 
-                    DB::commit();
+                    $occupied = ReceiptDetail::where('schedule_id', $schedule->id)
+                        ->whereDate('booking_date', $data['new_date'])
+                        ->whereNotIn('id', $details->modelKeys())->exists();
+                    if ($occupied) {
+                        throw \Illuminate\Validation\ValidationException::withMessages([
+                            'new_date' => 'Jadwal pada tanggal baru sudah dibooking. Pilih tanggal lain.',
+                        ]);
+                    }
 
-                } catch (\Throwable $th) {
-                    DB::rollback();
-                    Alert::error('Error', 'Terdapat gangguan saat menambah data..');
+                    $changes[] = [$detail, $schedule];
                 }
-            } else {
-                Alert::error('Error', 'Data pada tanggal digeser, sudah digunakan orang lain');
-            }
+
+                foreach ($changes as $change) {
+                    list($detail, $schedule) = $change;
+                    $detail->update([
+                        'schedule_id' => $schedule->id,
+                        'booking_date' => $data['new_date'],
+                    ]);
+                }
+                $receipt->update(['updated_user_id' => auth()->user()->id]);
+            });
+            Alert::success('Sukses', 'Tanggal booking berhasil diubah.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return redirect('/admin/receipt/' . $data['receipt_id'])->withErrors($e->errors());
         }
 
         return redirect("/admin/receipt/" . $data['receipt_id']);
