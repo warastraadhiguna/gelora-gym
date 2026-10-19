@@ -59,6 +59,7 @@
                                     <table class="invoice-table table table-bordered">
                                         <thead>
                                             <tr>
+                                                <th class="text-center">No</th>
                                                 <th>Lapangan</th>
                                                 <th class="text-center">Tanggal</th>
                                                 <th class="text-center">Jadwal</th>
@@ -71,7 +72,7 @@
                                         <tbody>
                                             @foreach($receiptDetailArray as $receipsDetail)
                                             <tr>
-
+                                                <td class="text-center align-center">{{ $loop->iteration }}</td>
                                                 <td class="align-center">{{ $receipsDetail['court']}}</td>
                                                 <td class="align-center"> 
                                                     {{ $receipsDetail['date']}}
@@ -92,7 +93,7 @@
                                         <tfoot>
                                         <tbody>
                                             <tr>
-                                                <th class="text-center" colspan="3">Total</th>
+                                                <th class="text-center" colspan="4">Total</th>
                                                 <th class="text-center"><span>Rp. {{ NumberFormat($total) }}</span></th>
                                                 @if($receipt->status !== '2' )                                                
                                                 <th></th>
